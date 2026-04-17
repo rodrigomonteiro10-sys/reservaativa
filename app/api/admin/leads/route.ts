@@ -18,8 +18,11 @@ function getDbConnection() {
 
 export async function GET(request: Request) {
   try {
+    console.log("[v0] Admin leads API called")
     const isAuth = await checkAuth()
+    console.log("[v0] Auth check result:", isAuth)
     if (!isAuth) {
+      console.log("[v0] Not authenticated, returning 401")
       return NextResponse.json(
         { error: 'Não autorizado' },
         { status: 401 }
@@ -108,6 +111,7 @@ export async function GET(request: Request) {
     }
 
     const total = parseInt(countResult[0]?.total || '0')
+    console.log("[v0] Found leads count:", leads.length, "Total:", total)
 
     return NextResponse.json({
       leads,

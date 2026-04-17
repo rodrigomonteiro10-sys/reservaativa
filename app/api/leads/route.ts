@@ -14,11 +14,11 @@ export async function POST(request: Request) {
       )
     }
 
-    const sql = neon(process.env.DATABASE_URL!)
-
+const sql = neon(process.env.DATABASE_URL ?? process.env.reservaativa_DATABASE_URL!)
+    
     // Build message from form data
     const message = [
-      `Quartos: ${rooms}`,
+      `Quartos: ${rooms}`,                          
       city ? `Cidade: ${city}` : null,
       challenge ? `Desafio: ${challenge}` : null,
     ].filter(Boolean).join('\n')

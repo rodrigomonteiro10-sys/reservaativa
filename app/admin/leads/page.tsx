@@ -60,20 +60,29 @@ export default function AdminLeadsPage() {
         params.set('status', statusFilter)
       }
 
+      console.log("[v0] Fetching leads with params:", params.toString())
       const response = await fetch(`/api/admin/leads?${params}`)
       
+      console.log("[v0] Response status:", response.status)
+      
       if (response.status === 401) {
+        console.log("[v0] 401 - Redirecting to /admin")
         router.replace('/admin')
         return
       }
 
-      if (!response.ok) throw new Error('Erro ao buscar leads')
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.log("[v0] Error response:", errorText)
+        throw new Error('Erro ao buscar leads')
+      }
 
       const data = await response.json()
-      setLeads(data.leads)
+      console.log("[v0] Data received:", data)
+      setLeads(data.leads || [])
       setPagination(data.pagination)
     } catch (error) {
-      console.error('Error fetching leads:', error)
+      console.error('[v0] Error fetching leads:', error)
     } finally {
       setIsLoading(false)
     }

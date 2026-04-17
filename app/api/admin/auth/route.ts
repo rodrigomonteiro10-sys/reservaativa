@@ -6,7 +6,9 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { password } = body
 
-    const adminPassword = process.env.ADMIN_PASSWORD
+    const adminPassword = process.env.ADMIN_PASSWORD ?? process.env.reservaativa_ADMIN_PASSWORD
+
+    console.log("[v0] Admin password configured:", !!adminPassword)
 
     if (!adminPassword) {
       return NextResponse.json(

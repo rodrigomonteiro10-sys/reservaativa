@@ -33,14 +33,18 @@ export default function AdminLoginPage() {
     setError(null)
 
     try {
+      console.log("[v0] Sending login request")
       const response = await fetch('/api/admin/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password }),
       })
 
+      console.log("[v0] Login response status:", response.status)
+      const data = await response.json()
+      console.log("[v0] Login response data:", data)
+
       if (!response.ok) {
-        const data = await response.json()
         throw new Error(data.error || 'Erro na autenticação')
       }
 

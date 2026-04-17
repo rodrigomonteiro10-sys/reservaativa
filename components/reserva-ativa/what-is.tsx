@@ -67,7 +67,7 @@ export function WhatIs() {
             <span className="text-gold">Toda a clareza que você precisa.</span>
           </h2>
           <p className="text-text-muted text-base sm:text-lg mt-4 max-w-3xl mx-auto">
-            Em 2–3 horas, mapeamos o funil comercial do seu hotel do zero. Sem achismo. Sem promessa vaga. Você recebe dados reais do seu negócio.
+            Em aproximadamente 1 hora, mapeamos o funil comercial do seu hotel do zero. Sem achismo. Sem promessa vaga. Você recebe dados reais do seu negócio.
           </p>
         </div>
 

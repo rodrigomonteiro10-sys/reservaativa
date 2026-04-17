@@ -27,7 +27,7 @@ export function Hero() {
 
             {/* Subtitle */}
             <p className="text-text-muted text-base sm:text-lg lg:text-xl leading-relaxed max-w-xl">
-              Em uma sessão de 2–3 horas, mapeamos o funil do seu hotel, calculamos a receita que você está deixando na mesa e entregamos um relatório completo com os gaps e oportunidades reais.
+              Em uma reunião estratégica de aproximadamente 1 hora, você sairá com o mapeamento de quanto está deixando na mesa.
             </p>
 
             {/* CTA */}

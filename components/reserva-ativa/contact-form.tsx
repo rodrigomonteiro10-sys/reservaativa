@@ -36,6 +36,7 @@ export function ContactForm() {
     const data = {
       name: formData.get('name') as string,
       hotel: formData.get('hotel') as string,
+      email: formData.get('email') as string,
       whatsapp: formData.get('whatsapp') as string,
       rooms: formData.get('rooms') as string,
       city: formData.get('city') as string,
@@ -121,6 +122,21 @@ export function ContactForm() {
                   required
                   className="w-full px-4 py-3 bg-navy-dark/50 border border-gold/20 rounded-lg text-white placeholder-text-muted focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors"
                   placeholder="Hotel Fazenda Vista Verde"
+                />
+              </div>
+
+              {/* Email */}
+              <div>
+                <label htmlFor="email" className="block text-white text-sm font-medium mb-2">
+                  E-mail *
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  className="w-full px-4 py-3 bg-navy-dark/50 border border-gold/20 rounded-lg text-white placeholder-text-muted focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors"
+                  placeholder="joao@hotel.com.br"
                 />
               </div>
 

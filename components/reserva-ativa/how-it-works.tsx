@@ -16,7 +16,7 @@ const steps = [
   },
   {
     number: 2,
-    title: "Sessão de diagnóstico: 2–3 horas",
+    title: "Sessão de diagnóstico: ~1 hora",
     description: "Mergulhamos no funil comercial. Analisamos canais, conversão, processos de follow-up e como a equipe lida com os leads.",
     tag: "100% baseado em dados do seu hotel",
     tagIcon: (

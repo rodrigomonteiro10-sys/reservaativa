@@ -19,7 +19,7 @@ const testimonials = [
     initials: "RL",
     name: "Ricardo L.",
     hotel: "Pousada de Alto Padrão · Vale do Café · 38 quartos",
-    quote: "Duas horas de conversa e eles enxergaram o que eu não via em três anos de operação. Profissional e direto ao ponto."
+    quote: "Uma hora de conversa e eles enxergaram o que eu não via em três anos de operação. Profissional e direto ao ponto."
   }
 ]
 

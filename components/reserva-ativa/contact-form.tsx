@@ -25,15 +25,41 @@ export function ContactForm() {
     return () => observer.disconnect()
   }, [])
 
+  const [error, setError] = useState<string | null>(null)
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setError(null)
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    setIsSubmitting(false)
-    setSubmitted(true)
+    const formData = new FormData(e.currentTarget)
+    const data = {
+      name: formData.get('name') as string,
+      hotel: formData.get('hotel') as string,
+      whatsapp: formData.get('whatsapp') as string,
+      rooms: formData.get('rooms') as string,
+      city: formData.get('city') as string,
+      challenge: formData.get('challenge') as string,
+    }
+
+    try {
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Erro ao enviar formulário')
+      }
+
+      setSubmitted(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao enviar formulário')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -204,6 +230,13 @@ export function ContactForm() {
                 </>
               )}
             </button>
+
+            {/* Error message */}
+            {error && (
+              <p className="text-red-400 text-sm text-center bg-red-500/10 border border-red-500/30 rounded-lg py-3 px-4">
+                {error}
+              </p>
+            )}
 
             {/* Privacy notice */}
             <p className="text-text-muted text-xs sm:text-sm text-center flex items-center justify-center gap-2">

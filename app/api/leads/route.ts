@@ -1,0 +1,46 @@
+import { neon } from '@neondatabase/serverless'
+import { NextResponse } from 'next/server'
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json()
+    const { name, hotel, whatsapp, rooms, city, challenge } = body
+
+    // Validate required fields
+    if (!name || !hotel || !whatsapp || !rooms) {
+      return NextResponse.json(
+        { error: 'Campos obrigatórios não preenchidos' },
+        { status: 400 }
+      )
+    }
+
+    const sql = neon(process.env.DATABASE_URL!)
+
+    // Build message from form data
+    const message = [
+      `Hotel: ${hotel}`,
+      `Quartos: ${rooms}`,
+      city ? `Cidade: ${city}` : null,
+      challenge ? `Desafio: ${challenge}` : null,
+    ].filter(Boolean).join('\n')
+
+    // Insert lead into database
+    const result = await sql`
+      INSERT INTO leads (name, email, phone, message, source)
+      VALUES (${name}, ${`${hotel}@reservaativa.com`}, ${whatsapp}, ${message}, 'landing_page_diagnostico')
+      RETURNING id, created_at
+    `
+
+    return NextResponse.json({
+      success: true,
+      message: 'Lead cadastrado com sucesso',
+      id: result[0]?.id,
+    })
+  } catch (error) {
+    console.error('Error saving lead:', error)
+    return NextResponse.json(
+      { error: 'Erro ao salvar lead' },
+      { status: 500 }
+    )
+  }
+}

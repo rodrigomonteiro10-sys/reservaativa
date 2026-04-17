@@ -18,7 +18,6 @@ export async function POST(request: Request) {
 
     // Build message from form data
     const message = [
-      `Hotel: ${hotel}`,
       `Quartos: ${rooms}`,
       city ? `Cidade: ${city}` : null,
       challenge ? `Desafio: ${challenge}` : null,
@@ -26,8 +25,8 @@ export async function POST(request: Request) {
 
     // Insert lead into database
     const result = await sql`
-      INSERT INTO leads (name, email, phone, message, source)
-      VALUES (${name}, ${`${hotel}@reservaativa.com`}, ${whatsapp}, ${message}, 'landing_page_diagnostico')
+      INSERT INTO leads (name, hotel, email, phone, message, source)
+      VALUES (${name}, ${hotel}, ${`${hotel}@reservaativa.com`}, ${whatsapp}, ${message}, 'landing_page_diagnostico')
       RETURNING id, created_at
     `
 

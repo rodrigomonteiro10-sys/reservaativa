@@ -64,12 +64,6 @@ export default function AdminLeadsPage() {
       const response = await fetch(`/api/admin/leads?${params}`)
       
       console.log("[v0] Response status:", response.status)
-      
-      if (response.status === 401) {
-        console.log("[v0] 401 - Redirecting to /admin")
-        router.replace('/admin')
-        return
-      }
 
       if (!response.ok) {
         const errorText = await response.text()

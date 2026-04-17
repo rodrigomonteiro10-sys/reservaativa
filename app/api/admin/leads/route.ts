@@ -18,14 +18,13 @@ function getDbConnection() {
 
 export async function GET(request: Request) {
   try {
-    // Auth check temporarily disabled for debugging
-    // const isAuth = await checkAuth()
-    // if (!isAuth) {
-    //   return NextResponse.json(
-    //     { error: 'Não autorizado' },
-    //     { status: 401 }
-    //   )
-    // }
+    const isAuth = await checkAuth()
+    if (!isAuth) {
+      return NextResponse.json(
+        { error: 'Não autorizado' },
+        { status: 401 }
+      )
+    }
 
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status')
@@ -109,7 +108,6 @@ export async function GET(request: Request) {
     }
 
     const total = parseInt(countResult[0]?.total || '0')
-    console.log("[v0] Found leads count:", leads.length, "Total:", total)
 
     return NextResponse.json({
       leads,

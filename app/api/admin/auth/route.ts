@@ -8,8 +8,6 @@ export async function POST(request: Request) {
 
     const adminPassword = process.env.ADMIN_PASSWORD ?? process.env.reservaativa_ADMIN_PASSWORD
 
-    console.log("[v0] Admin password configured:", !!adminPassword)
-
     if (!adminPassword) {
       return NextResponse.json(
         { error: 'Configuração de admin não encontrada' },

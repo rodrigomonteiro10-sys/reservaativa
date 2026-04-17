@@ -71,7 +71,7 @@ export function Hero() {
                 {/* Stat 2 */}
                 <div className="flex gap-4 border-l-2 border-gold pl-4">
                   <div>
-                    <span className="font-[var(--font-heading)] text-3xl sm:text-4xl font-bold text-gold">18–25%</span>
+                    <span className="font-[var(--font-heading)] text-3xl sm:text-4xl font-bold text-gold">{"18-25%"}</span>
                     <p className="text-white/80 text-sm sm:text-base mt-1">
                       do faturamento vai embora em comissão de OTA desnecessariamente
                     </p>

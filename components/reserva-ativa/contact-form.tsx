@@ -1,8 +1,10 @@
 "use client"
 
 import { useState, useEffect, useRef, type FormEvent } from "react"
+import { useRouter } from "next/navigation"
 
 export function ContactForm() {
+  const router = useRouter()
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
@@ -50,12 +52,18 @@ export function ContactForm() {
         body: JSON.stringify(data),
       })
 
+      const responseData = await response.json()
+
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || 'Erro ao enviar formulário')
+        throw new Error(responseData.error || 'Erro ao enviar formulário')
       }
 
-      setSubmitted(true)
+      // Redirect to diagnostico page with token
+      if (responseData.token) {
+        router.push(`/diagnostico/${responseData.token}`)
+      } else {
+        setSubmitted(true)
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao enviar formulário')
     } finally {

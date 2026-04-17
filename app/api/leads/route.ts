@@ -22,7 +22,7 @@ export async function POST(request: Request) {
 
     // Build message from form data
     const message = [
-      `Quartos: ${rooms}`,
+      `Quartos: ${rooms}`,                          
       city ? `Cidade: ${city}` : null,
       challenge ? `Desafio: ${challenge}` : null,
     ].filter(Boolean).join('\n')

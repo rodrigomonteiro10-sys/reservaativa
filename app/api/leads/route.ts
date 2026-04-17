@@ -14,7 +14,11 @@ export async function POST(request: Request) {
       )
     }
 
-    const sql = neon(process.env.DATABASE_URL!)
+    const connectionString = process.env.DATABASE_URL ?? process.env.reservaativa_DATABASE_URL
+    if (!connectionString) {
+      throw new Error('Missing DATABASE_URL env var')
+    }
+    const sql = neon(connectionString)
 
     // Build message from form data
     const message = [

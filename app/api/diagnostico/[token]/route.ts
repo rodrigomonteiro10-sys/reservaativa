@@ -55,64 +55,31 @@ export async function PATCH(
     const body = await request.json()
     const sql = getDbConnection()
 
-    // Build dynamic update query based on provided fields
-    const allowedFields = [
-      'categoria',
-      'tipo_localizacao',
-      'atrativos',
-      'publico_principal',
-      'canais_venda',
-      'canal_principal',
-      'adr',
-      'adr_nao_sei',
-      'ocupacao_media',
-      'ocupacao_nao_sei',
-      'faturamento_mensal',
-      'desafios',
-      'status'
-    ]
-
-    // Filter only allowed fields from body
-    const updates: Record<string, unknown> = {}
-    for (const field of allowedFields) {
-      if (body[field] !== undefined) {
-        updates[field] = body[field]
-      }
-    }
-
-    if (Object.keys(updates).length === 0) {
-      return NextResponse.json(
-        { error: 'Nenhum campo válido para atualizar' },
-        { status: 400 }
-      )
-    }
-
     // Check if status is being set to 'completo'
-    const isCompleting = updates.status === 'completo'
+    const isCompleting = body.status === 'completo'
 
-    // Build the SET clause dynamically
-    const setClauses = Object.entries(updates).map(([key, value]) => {
-      if (typeof value === 'string') {
-        return `${key} = '${value.replace(/'/g, "''")}'`
-      } else if (typeof value === 'boolean') {
-        return `${key} = ${value}`
-      } else if (typeof value === 'number') {
-        return `${key} = ${value}`
-      } else if (value === null) {
-        return `${key} = NULL`
-      }
-      return `${key} = '${String(value).replace(/'/g, "''")}'`
-    }).join(', ')
-
-    const completedAtClause = isCompleting ? ', completed_at = NOW()' : ''
-    const query = `
+    // Update all fields using tagged template literal
+    const result = await sql`
       UPDATE hotel_diagnostico 
-      SET ${setClauses}, updated_at = NOW()${completedAtClause}
-      WHERE token = '${token}'
+      SET 
+        categoria = COALESCE(${body.categoria ?? null}, categoria),
+        tipo_localizacao = COALESCE(${body.tipo_localizacao ?? null}, tipo_localizacao),
+        atrativos = COALESCE(${body.atrativos ?? null}, atrativos),
+        publico_principal = COALESCE(${body.publico_principal ?? null}, publico_principal),
+        canais_venda = COALESCE(${body.canais_venda ?? null}, canais_venda),
+        canal_principal = COALESCE(${body.canal_principal ?? null}, canal_principal),
+        adr = COALESCE(${body.adr ?? null}, adr),
+        adr_nao_sei = COALESCE(${body.adr_nao_sei ?? null}, adr_nao_sei),
+        ocupacao_media = COALESCE(${body.ocupacao_media ?? null}, ocupacao_media),
+        ocupacao_nao_sei = COALESCE(${body.ocupacao_nao_sei ?? null}, ocupacao_nao_sei),
+        faturamento_mensal = COALESCE(${body.faturamento_mensal ?? null}, faturamento_mensal),
+        desafios = COALESCE(${body.desafios ?? null}, desafios),
+        status = COALESCE(${body.status ?? null}, status),
+        updated_at = NOW(),
+        completed_at = CASE WHEN ${isCompleting} THEN NOW() ELSE completed_at END
+      WHERE token = ${token}
       RETURNING *
     `
-
-    const result = await sql(query)
 
     if (result.length === 0) {
       return NextResponse.json(

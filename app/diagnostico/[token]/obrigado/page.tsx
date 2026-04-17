@@ -58,7 +58,7 @@ export default async function ObrigadoPage() {
 
         {/* Contact info */}
         <p className="text-text-muted text-sm mt-8">
-          Dúvidas? Entre em contato pelo WhatsApp: <a href="https://wa.me/5521999999999" className="text-gold hover:underline">(21) 99999-9999</a>
+          Dúvidas? Entre em contato pelo WhatsApp: <a href="https://wa.me/5524999720763" className="text-gold hover:underline">(24) 99972-0763</a>
         </p>
       </div>
     </div>

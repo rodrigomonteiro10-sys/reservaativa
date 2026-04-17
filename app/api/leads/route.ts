@@ -4,10 +4,10 @@ import { NextResponse } from 'next/server'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { name, hotel, whatsapp, rooms, city, challenge } = body
+    const { name, hotel, email, whatsapp, rooms, city, challenge } = body
 
     // Validate required fields
-    if (!name || !hotel || !whatsapp || !rooms) {
+    if (!name || !hotel || !email || !whatsapp || !rooms) {
       return NextResponse.json(
         { error: 'Campos obrigatórios não preenchidos' },
         { status: 400 }
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     // Insert lead into database
     const result = await sql`
       INSERT INTO leads (name, hotel, email, phone, message, source)
-      VALUES (${name}, ${hotel}, ${`${hotel}@reservaativa.com`}, ${whatsapp}, ${message}, 'landing_page_diagnostico')
+      VALUES (${name}, ${hotel}, ${email}, ${whatsapp}, ${message}, 'landing_page_diagnostico')
       RETURNING id, created_at
     `
 

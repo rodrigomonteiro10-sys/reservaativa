@@ -22,11 +22,21 @@ const publicos = [
 ]
 
 export function Step2Publico({ data, onNext, onPrevious, isSaving }: StepProps) {
-  const [publicoPrincipal, setPublicoPrincipal] = useState(data.publico_principal || "")
+  const [publicosSelecionados, setPublicosSelecionados] = useState<string[]>(
+    data.publico_principal ? data.publico_principal.split(",") : []
+  )
+
+  const togglePublico = (value: string) => {
+    setPublicosSelecionados(prev => 
+      prev.includes(value) 
+        ? prev.filter(p => p !== value)
+        : [...prev, value]
+    )
+  }
 
   const handleSubmit = () => {
-    if (!publicoPrincipal) return
-    onNext({ publico_principal: publicoPrincipal })
+    if (publicosSelecionados.length === 0) return
+    onNext({ publico_principal: publicosSelecionados.join(",") })
   }
 
   return (
@@ -38,27 +48,36 @@ export function Step2Publico({ data, onNext, onPrevious, isSaving }: StepProps) 
 
       <div className="space-y-6">
         <div>
-          <label className="block text-white text-sm font-medium mb-3">
+          <label className="block text-white text-sm font-medium mb-1">
             Público principal *
           </label>
+          <p className="text-text-muted text-sm mb-3">Selecione todos os perfis que se aplicam ao seu hotel</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {publicos.map(pub => (
-              <button
-                key={pub.value}
-                type="button"
-                onClick={() => setPublicoPrincipal(pub.value)}
-                className={`px-4 py-4 rounded-lg border text-left transition-all flex items-center gap-3 ${
-                  publicoPrincipal === pub.value
-                    ? "bg-gold/20 border-gold"
-                    : "bg-navy-dark/50 border-gold/20 hover:border-gold/50"
-                }`}
-              >
-                <span className="text-2xl">{pub.icon}</span>
-                <span className={`font-medium ${publicoPrincipal === pub.value ? "text-gold" : "text-white"}`}>
-                  {pub.label}
-                </span>
-              </button>
-            ))}
+            {publicos.map(pub => {
+              const isSelected = publicosSelecionados.includes(pub.value)
+              return (
+                <button
+                  key={pub.value}
+                  type="button"
+                  onClick={() => togglePublico(pub.value)}
+                  className={`px-4 py-4 rounded-lg border text-left transition-all flex items-center gap-3 ${
+                    isSelected
+                      ? "bg-gold/20 border-gold"
+                      : "bg-navy-dark/50 border-gold/20 hover:border-gold/50"
+                  }`}
+                >
+                  <span className="text-2xl">{pub.icon}</span>
+                  <span className={`font-medium flex-1 ${isSelected ? "text-gold" : "text-white"}`}>
+                    {pub.label}
+                  </span>
+                  {isSelected && (
+                    <svg className="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  )}
+                </button>
+              )
+            })}
           </div>
         </div>
       </div>
@@ -76,7 +95,7 @@ export function Step2Publico({ data, onNext, onPrevious, isSaving }: StepProps) 
         </button>
         <button
           onClick={handleSubmit}
-          disabled={!publicoPrincipal || isSaving}
+          disabled={publicosSelecionados.length === 0 || isSaving}
           className="px-8 py-3 bg-gold text-navy font-bold rounded-lg hover:bg-gold-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           {isSaving ? (

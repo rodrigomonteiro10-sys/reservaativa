@@ -37,6 +37,14 @@ const statusLabels: Record<string, { label: string; color: string }> = {
   completo: { label: "Completo", color: "bg-green-500/20 text-green-400 border-green-500/30" },
 }
 
+function getAuthHeaders(): HeadersInit {
+  const token = typeof window !== 'undefined' ? sessionStorage.getItem('admin_token') : null
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+  }
+}
+
 export default function AdminLeadsPage() {
   const router = useRouter()
   const [leads, setLeads] = useState<Lead[]>([])
@@ -60,7 +68,9 @@ export default function AdminLeadsPage() {
         params.set('status', statusFilter)
       }
 
-      const response = await fetch(`/api/admin/leads?${params}`)
+      const response = await fetch(`/api/admin/leads?${params}`, {
+        headers: getAuthHeaders()
+      })
       
       if (response.status === 401) {
         router.replace('/admin')
@@ -81,8 +91,8 @@ export default function AdminLeadsPage() {
     }
   }
 
-  async function handleLogout() {
-    await fetch('/api/admin/auth', { method: 'DELETE' })
+  function handleLogout() {
+    sessionStorage.removeItem('admin_token')
     router.replace('/admin')
   }
 

@@ -1,11 +1,10 @@
 import { neon } from '@neondatabase/serverless'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
+import { verifyAdminToken } from '@/lib/admin-auth'
 
-async function checkAuth() {
-  const cookieStore = await cookies()
-  const authCookie = cookieStore.get('admin_auth')
-  return authCookie?.value === 'authenticated'
+function checkAuth(request: Request): boolean {
+  const authHeader = request.headers.get('Authorization')
+  return verifyAdminToken(authHeader)
 }
 
 function getDbConnection() {
@@ -19,8 +18,7 @@ function getDbConnection() {
 // GET - List leads for CRM Kanban
 export async function GET(request: Request) {
   try {
-    const isAuth = await checkAuth()
-    if (!isAuth) {
+    if (!checkAuth(request)) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 

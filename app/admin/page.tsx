@@ -15,19 +15,12 @@ function AdminLoginForm() {
 
   // Check if already authenticated
   useEffect(() => {
-    async function checkAuth() {
-      try {
-        const response = await fetch('/api/admin/leads?limit=1')
-        if (response.ok) {
-          router.replace(redirectTo)
-        }
-      } catch {
-        // Not authenticated, show login form
-      } finally {
-        setIsChecking(false)
-      }
+    const token = sessionStorage.getItem('admin_token')
+    if (token) {
+      router.replace(redirectTo)
+    } else {
+      setIsChecking(false)
     }
-    checkAuth()
   }, [router, redirectTo])
 
   const handleSubmit = async (e: FormEvent) => {
@@ -46,6 +39,11 @@ function AdminLoginForm() {
 
       if (!response.ok) {
         throw new Error(data.error || 'Erro na autenticação')
+      }
+
+      // Save token in sessionStorage
+      if (data.token) {
+        sessionStorage.setItem('admin_token', data.token)
       }
 
       router.push(redirectTo)

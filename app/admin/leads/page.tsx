@@ -117,6 +117,12 @@ export default function AdminLeadsPage() {
           </div>
           <div className="flex items-center gap-4">
             <Link 
+              href="/admin/crm"
+              className="px-4 py-2 bg-gold/20 text-gold text-sm font-medium rounded-lg hover:bg-gold/30 transition-colors"
+            >
+              CRM
+            </Link>
+            <Link 
               href="/"
               className="text-text-muted hover:text-white transition-colors text-sm"
             >

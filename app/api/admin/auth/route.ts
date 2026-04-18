@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       maxAge: 60 * 60 * 24, // 24 hours
       path: '/',
     })
-
+    
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Auth error:', error)

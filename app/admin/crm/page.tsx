@@ -60,7 +60,7 @@ export default function CRMPage() {
       const response = await fetch(`/api/admin/crm/leads?${params}`)
       
       if (response.status === 401) {
-        router.replace('/admin')
+        router.replace('/admin?redirect=/admin/crm')
         return
       }
 

@@ -1,9 +1,6 @@
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 
-// Simple token - in production, use a proper JWT or session management
-const ADMIN_TOKEN = 'reservaativa_admin_session_2024'
-
 export async function POST(request: Request) {
   try {
     const body = await request.json()
@@ -25,11 +22,17 @@ export async function POST(request: Request) {
       )
     }
 
-    // Return token for client to store
-    return NextResponse.json({ 
-      success: true,
-      token: ADMIN_TOKEN
+    // Set auth cookie (valid for 24 hours)
+    const cookieStore = await cookies()
+    cookieStore.set('admin_auth', 'authenticated', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24, // 24 hours
+      path: '/',
     })
+
+    return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Auth error:', error)
     return NextResponse.json(
@@ -40,10 +43,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE() {
+  const cookieStore = await cookies()
+  cookieStore.delete('admin_auth')
   return NextResponse.json({ success: true })
-}
-
-// Helper function to check auth from token
-export function verifyAdminToken(token: string | null): boolean {
-  return token === ADMIN_TOKEN
 }

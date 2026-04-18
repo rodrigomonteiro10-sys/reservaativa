@@ -15,12 +15,19 @@ function AdminLoginForm() {
 
   // Check if already authenticated
   useEffect(() => {
-    const token = sessionStorage.getItem('admin_token')
-    if (token) {
-      router.replace(redirectTo)
-    } else {
-      setIsChecking(false)
+    async function checkAuth() {
+      try {
+        const response = await fetch('/api/admin/leads?limit=1')
+        if (response.ok) {
+          router.replace(redirectTo)
+        }
+      } catch {
+        // Not authenticated, show login form
+      } finally {
+        setIsChecking(false)
+      }
     }
+    checkAuth()
   }, [router, redirectTo])
 
   const handleSubmit = async (e: FormEvent) => {

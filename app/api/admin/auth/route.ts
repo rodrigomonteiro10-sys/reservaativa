@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 
 export async function POST(request: Request) {
   try {
@@ -22,17 +21,14 @@ export async function POST(request: Request) {
       )
     }
 
-    // Set auth cookie (valid for 24 hours)
-    const cookieStore = await cookies()
-    cookieStore.set('admin_auth', 'authenticated', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24, // 24 hours
-      path: '/',
-    })
+    // Set auth cookie (valid for 24 hours) using Set-Cookie header
+    const isProduction = process.env.NODE_ENV === 'production'
+    const maxAge = 60 * 60 * 24 // 24 hours
+    const cookieValue = `admin_auth=authenticated; Path=/; Max-Age=${maxAge}; SameSite=Lax${isProduction ? '; Secure' : ''}; HttpOnly`
     
-    return NextResponse.json({ success: true })
+    const response = NextResponse.json({ success: true })
+    response.headers.set('Set-Cookie', cookieValue)
+    return response
   } catch (error) {
     console.error('Auth error:', error)
     return NextResponse.json(
@@ -43,7 +39,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE() {
-  const cookieStore = await cookies()
-  cookieStore.delete('admin_auth')
-  return NextResponse.json({ success: true })
+  const response = NextResponse.json({ success: true })
+  response.headers.set('Set-Cookie', 'admin_auth=; Path=/; Max-Age=0; HttpOnly')
+  return response
 }

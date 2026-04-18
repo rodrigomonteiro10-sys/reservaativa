@@ -306,7 +306,7 @@ export default function AdminLeadsPage() {
                     {selectedLead.adr && (
                       <div>
                         <p className="text-text-muted text-sm">ADR</p>
-                        <p className="text-white">R$ {selectedLead.adr.toFixed(2)}</p>
+                        <p className="text-white">R$ {parseFloat(String(selectedLead.adr)).toFixed(2)}</p>
                       </div>
                     )}
                     {selectedLead.ocupacao_media && (

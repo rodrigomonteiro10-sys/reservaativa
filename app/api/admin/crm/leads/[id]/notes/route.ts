@@ -29,6 +29,7 @@ export async function POST(
 
     const { id } = await params
     const leadId = parseInt(id)
+    if (isNaN(leadId)) return NextResponse.json({ error: 'ID inválido' }, { status: 400 })
     const body = await request.json()
     const sql = getDbConnection()
 

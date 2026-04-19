@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 
 interface LeadDetail {
   id: number
@@ -96,8 +96,6 @@ export function LeadDetailModal({ leadId, onClose, onUpdate }: LeadDetailModalPr
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'info' | 'timeline' | 'diagnostico'>('info')
   
-  // Edit states
-  const [editingField, setEditingField] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     crm_stage: '',
     crm_priority: '',
@@ -112,23 +110,19 @@ export function LeadDetailModal({ leadId, onClose, onUpdate }: LeadDetailModalPr
   const [newNote, setNewNote] = useState('')
   const [isSaving, setIsSaving] = useState(false)
 
-  useEffect(() => {
-    fetchLeadDetails()
-  }, [leadId])
-
-  async function fetchLeadDetails() {
+  const fetchLeadDetails = useCallback(async () => {
     try {
       const response = await fetch(`/api/admin/crm/leads/${leadId}`, {
         credentials: 'include',
       })
       if (!response.ok) throw new Error('Erro ao buscar lead')
-      
+
       const data = await response.json()
       setLead(data.lead)
       setActivities(data.activities || [])
       setNotes(data.notes || [])
       setStageHistory(data.stageHistory || [])
-      
+
       setFormData({
         crm_stage: data.lead.crm_stage || 'novo',
         crm_priority: data.lead.crm_priority || 'media',
@@ -142,7 +136,11 @@ export function LeadDetailModal({ leadId, onClose, onUpdate }: LeadDetailModalPr
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [leadId])
+
+  useEffect(() => {
+    fetchLeadDetails()
+  }, [fetchLeadDetails])
 
   async function handleSaveField(field: string, value: string) {
     setIsSaving(true)
@@ -162,7 +160,6 @@ export function LeadDetailModal({ leadId, onClose, onUpdate }: LeadDetailModalPr
       console.error('Error saving field:', error)
     } finally {
       setIsSaving(false)
-      setEditingField(null)
     }
   }
 
@@ -598,7 +595,9 @@ export function LeadDetailModal({ leadId, onClose, onUpdate }: LeadDetailModalPr
                     {lead.canais_venda && (
                       <div className="sm:col-span-2">
                         <p className="text-text-muted text-sm">Canais de Venda</p>
-                        <p className="text-white capitalize">{lead.canais_venda.replace(/_/g, ', ')}</p>
+                        <p className="text-white capitalize">
+                          {(() => { try { return (JSON.parse(lead.canais_venda) as string[]).map(v => v.replace(/_/g, ' ')).join(', ') } catch { return lead.canais_venda } })()}
+                        </p>
                       </div>
                     )}
                     {(lead.adr || lead.adr_nao_sei) && (
@@ -622,13 +621,17 @@ export function LeadDetailModal({ leadId, onClose, onUpdate }: LeadDetailModalPr
                     {lead.atrativos && (
                       <div className="sm:col-span-2">
                         <p className="text-text-muted text-sm">Atrativos</p>
-                        <p className="text-white capitalize">{lead.atrativos.replace(/_/g, ', ')}</p>
+                        <p className="text-white capitalize">
+                          {(() => { try { return (JSON.parse(lead.atrativos) as string[]).map(v => v.replace(/_/g, ' ')).join(', ') } catch { return lead.atrativos } })()}
+                        </p>
                       </div>
                     )}
                     {lead.desafios && (
                       <div className="sm:col-span-2">
                         <p className="text-text-muted text-sm">Desafios</p>
-                        <p className="text-white whitespace-pre-wrap">{lead.desafios}</p>
+                        <p className="text-white capitalize">
+                          {(() => { try { return (JSON.parse(lead.desafios) as string[]).map(v => v.replace(/_/g, ' ')).join(', ') } catch { return lead.desafios } })()}
+                        </p>
                       </div>
                     )}
                   </div>

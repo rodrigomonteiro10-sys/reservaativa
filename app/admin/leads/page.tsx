@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
 
 interface Lead {
   id: number
@@ -81,11 +80,6 @@ export default function AdminLeadsPage() {
     fetchLeads()
   }, [fetchLeads])
 
-  async function handleLogout() {
-    await fetch('/api/admin/auth', { method: 'DELETE', credentials: 'include' })
-    router.replace('/admin')
-  }
-
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -97,37 +91,7 @@ export default function AdminLeadsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-navy">
-      {/* Header */}
-      <header className="bg-navy-dark/50 border-b border-gold/20 py-4">
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
-          <div>
-            <span className="text-gold font-semibold text-sm">Reserva Ativa</span>
-            <h1 className="text-white text-xl font-bold">Gestão de Leads</h1>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link 
-              href="/admin/crm"
-              className="px-4 py-2 bg-gold/20 text-gold text-sm font-medium rounded-lg hover:bg-gold/30 transition-colors"
-            >
-              CRM
-            </Link>
-            <Link 
-              href="/"
-              className="text-text-muted hover:text-white transition-colors text-sm"
-            >
-              Ver site
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 border border-gold/30 text-white text-sm rounded-lg hover:border-gold/60 transition-colors"
-            >
-              Sair
-            </button>
-          </div>
-        </div>
-      </header>
-
+    <div>
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* Filters */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">

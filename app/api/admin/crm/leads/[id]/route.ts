@@ -72,9 +72,9 @@ export async function GET(
     `
 
     const stageHistory = await sql`
-      SELECT * FROM lead_stage_history 
-      WHERE lead_id = ${leadId} 
-      ORDER BY changed_at DESC
+      SELECT * FROM lead_stage_history
+      WHERE lead_id = ${leadId}
+      ORDER BY created_at DESC
     `
 
     return NextResponse.json({
@@ -130,14 +130,13 @@ export async function PATCH(
     // Record stage change in history if stage changed
     if (body.crm_stage && body.crm_stage !== currentStage) {
       await sql`
-        INSERT INTO lead_stage_history (lead_id, from_stage, to_stage, changed_by)
-        VALUES (${leadId}, ${currentStage}, ${body.crm_stage}, ${body.changed_by || 'admin'})
+        INSERT INTO lead_stage_history (lead_id, from_stage, to_stage, author)
+        VALUES (${leadId}, ${currentStage}, ${body.crm_stage}, ${'admin'})
       `
 
-      // Also create an activity for the stage change
       await sql`
-        INSERT INTO lead_activities (lead_id, type, description, created_by)
-        VALUES (${leadId}, 'stage_change', ${'Movido de ' + (currentStage || 'novo') + ' para ' + body.crm_stage}, ${body.changed_by || 'admin'})
+        INSERT INTO lead_activities (lead_id, type, description, author)
+        VALUES (${leadId}, 'stage_change', ${'Movido de ' + (currentStage || 'novo') + ' para ' + body.crm_stage}, ${'admin'})
       `
     }
 
@@ -145,5 +144,33 @@ export async function PATCH(
   } catch (error) {
     console.error('Error updating lead:', error)
     return NextResponse.json({ error: 'Erro ao atualizar lead' }, { status: 500 })
+  }
+}
+
+// DELETE - Remove lead and all related data
+export async function DELETE(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const isAuth = await checkAuth()
+    if (!isAuth) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+    }
+
+    const { id } = await params
+    const leadId = parseInt(id)
+    const sql = getDbConnection()
+
+    await sql`DELETE FROM lead_activities WHERE lead_id = ${leadId}`
+    await sql`DELETE FROM lead_notes WHERE lead_id = ${leadId}`
+    await sql`DELETE FROM lead_stage_history WHERE lead_id = ${leadId}`
+    await sql`DELETE FROM hotel_diagnostico WHERE lead_id = ${leadId}`
+    await sql`DELETE FROM leads WHERE id = ${leadId}`
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error('Error deleting lead:', error)
+    return NextResponse.json({ error: 'Erro ao excluir lead' }, { status: 500 })
   }
 }

@@ -31,12 +31,16 @@ export async function GET(request: Request) {
     const sql = getDbConnection()
 
     const leads = await sql`
-      SELECT 
+      SELECT
         l.id,
         l.name,
         l.hotel,
         l.email,
         l.phone,
+        l.cidade,
+        l.quartos,
+        l.desafio,
+        l.message,
         l.created_at,
         l.crm_stage,
         l.crm_priority,
@@ -49,17 +53,22 @@ export async function GET(request: Request) {
         hd.categoria,
         hd.adr,
         hd.ocupacao_media,
-        hd.faturamento_mensal
+        hd.faturamento_mensal,
+        hd.tipo_localizacao,
+        hd.publico_principal,
+        hd.canal_principal,
+        (SELECT COUNT(*) FROM lead_activities la WHERE la.lead_id = l.id) as activities_count,
+        (SELECT COUNT(*) FROM lead_notes ln WHERE ln.lead_id = l.id) as notes_count
       FROM leads l
       LEFT JOIN hotel_diagnostico hd ON hd.lead_id = l.id
       WHERE 1=1
         AND (${assignedTo}::text IS NULL OR l.crm_assigned_to = ${assignedTo})
         AND (${priority}::text IS NULL OR l.crm_priority = ${priority})
-      ORDER BY 
-        CASE l.crm_priority 
-          WHEN 'alta' THEN 1 
-          WHEN 'media' THEN 2 
-          WHEN 'baixa' THEN 3 
+      ORDER BY
+        CASE l.crm_priority
+          WHEN 'alta' THEN 1
+          WHEN 'media' THEN 2
+          WHEN 'baixa' THEN 3
         END,
         l.created_at DESC
     `

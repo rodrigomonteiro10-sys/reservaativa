@@ -7,5 +7,5 @@ __v0_jsx-dev-runtime.ts
 node_modules
 .next/
 .env*.local
-.DS_Store
-.vercel
+.DS_Storepackage-lock.json
+tsconfig.tsbuildinfo

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
@@ -45,11 +45,7 @@ export default function AdminLeadsPage() {
   const [statusFilter, setStatusFilter] = useState("todos")
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null)
 
-  useEffect(() => {
-    fetchLeads()
-  }, [statusFilter])
-
-  async function fetchLeads(page = 1) {
+  const fetchLeads = useCallback(async (page = 1) => {
     setIsLoading(true)
     try {
       const params = new URLSearchParams({
@@ -61,7 +57,7 @@ export default function AdminLeadsPage() {
       }
 
       const response = await fetch(`/api/admin/leads?${params}`)
-      
+
       if (response.status === 401) {
         router.replace('/admin')
         return
@@ -77,7 +73,11 @@ export default function AdminLeadsPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [statusFilter, router])
+
+  useEffect(() => {
+    fetchLeads()
+  }, [fetchLeads])
 
   async function handleLogout() {
     await fetch('/api/admin/auth', { method: 'DELETE' })
@@ -275,8 +275,8 @@ export default function AdminLeadsPage() {
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
                       <p className="text-text-muted text-sm">Status</p>
-                      <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium border ${statusLabels[selectedLead.diagnostico_status]?.color}`}>
-                        {statusLabels[selectedLead.diagnostico_status]?.label}
+                      <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium border ${statusLabels[selectedLead.diagnostico_status]?.color || 'bg-gray-500/20 text-gray-400'}`}>
+                        {statusLabels[selectedLead.diagnostico_status]?.label || selectedLead.diagnostico_status}
                       </span>
                     </div>
                     {selectedLead.categoria && (

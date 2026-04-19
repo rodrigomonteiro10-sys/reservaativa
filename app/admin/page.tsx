@@ -1,10 +1,13 @@
 "use client"
 
-import { useState, useEffect, FormEvent } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect, FormEvent, Suspense } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 
-export default function AdminLoginPage() {
+function AdminLoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirect') || '/admin/leads'
+  
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -14,9 +17,11 @@ export default function AdminLoginPage() {
   useEffect(() => {
     async function checkAuth() {
       try {
-        const response = await fetch('/api/admin/leads?limit=1')
+        const response = await fetch('/api/admin/leads?limit=1', {
+          credentials: 'include',
+        })
         if (response.ok) {
-          router.replace('/admin/leads')
+          router.replace(redirectTo)
         }
       } catch {
         // Not authenticated, show login form
@@ -25,7 +30,7 @@ export default function AdminLoginPage() {
       }
     }
     checkAuth()
-  }, [router])
+  }, [router, redirectTo])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -39,12 +44,13 @@ export default function AdminLoginPage() {
         body: JSON.stringify({ password }),
       })
 
+      const data = await response.json()
+
       if (!response.ok) {
-        const data = await response.json()
         throw new Error(data.error || 'Erro na autenticação')
       }
 
-      router.push('/admin/leads')
+      router.push(redirectTo)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro na autenticação')
     } finally {
@@ -109,5 +115,17 @@ export default function AdminLoginPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-navy flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-4 border-gold border-t-transparent rounded-full" />
+      </div>
+    }>
+      <AdminLoginForm />
+    </Suspense>
   )
 }

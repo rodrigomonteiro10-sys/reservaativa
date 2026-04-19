@@ -56,7 +56,9 @@ export default function AdminLeadsPage() {
         params.set('status', statusFilter)
       }
 
-      const response = await fetch(`/api/admin/leads?${params}`)
+      const response = await fetch(`/api/admin/leads?${params}`, {
+        credentials: 'include',
+      })
 
       if (response.status === 401) {
         router.replace('/admin')
@@ -66,7 +68,7 @@ export default function AdminLeadsPage() {
       if (!response.ok) throw new Error('Erro ao buscar leads')
 
       const data = await response.json()
-      setLeads(data.leads)
+      setLeads(data.leads || [])
       setPagination(data.pagination)
     } catch (error) {
       console.error('Error fetching leads:', error)
@@ -80,7 +82,7 @@ export default function AdminLeadsPage() {
   }, [fetchLeads])
 
   async function handleLogout() {
-    await fetch('/api/admin/auth', { method: 'DELETE' })
+    await fetch('/api/admin/auth', { method: 'DELETE', credentials: 'include' })
     router.replace('/admin')
   }
 
@@ -104,6 +106,12 @@ export default function AdminLeadsPage() {
             <h1 className="text-white text-xl font-bold">Gestão de Leads</h1>
           </div>
           <div className="flex items-center gap-4">
+            <Link 
+              href="/admin/crm"
+              className="px-4 py-2 bg-gold/20 text-gold text-sm font-medium rounded-lg hover:bg-gold/30 transition-colors"
+            >
+              CRM
+            </Link>
             <Link 
               href="/"
               className="text-text-muted hover:text-white transition-colors text-sm"
@@ -306,7 +314,7 @@ export default function AdminLeadsPage() {
                     {selectedLead.adr && (
                       <div>
                         <p className="text-text-muted text-sm">ADR</p>
-                        <p className="text-white">R$ {parseFloat(String(selectedLead.adr)).toFixed(2)}</p>
+                        <p className="text-white">R$ {selectedLead.adr.toFixed(2)}</p>
                       </div>
                     )}
                     {selectedLead.ocupacao_media && (

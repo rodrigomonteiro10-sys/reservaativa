@@ -10,10 +10,19 @@ CREATE TABLE IF NOT EXISTS leads (
   quartos VARCHAR(50),
   cidade VARCHAR(255),
   desafio VARCHAR(255),
+  -- CRM fields
+  crm_stage VARCHAR(50) DEFAULT 'novo',
+  crm_priority VARCHAR(20) DEFAULT 'media',
+  crm_assigned_to VARCHAR(255),
+  crm_next_contact TIMESTAMP WITH TIME ZONE,
+  crm_expected_value NUMERIC(10, 2),
+  crm_lost_reason TEXT,
+  updated_at TIMESTAMP WITH TIME ZONE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 CREATE INDEX IF NOT EXISTS idx_leads_created_at ON leads(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_leads_crm_stage ON leads(crm_stage);
 
 -- Create hotel_diagnostico table
 CREATE TABLE IF NOT EXISTS hotel_diagnostico (
@@ -40,3 +49,38 @@ CREATE TABLE IF NOT EXISTS hotel_diagnostico (
 
 CREATE INDEX IF NOT EXISTS idx_hotel_diagnostico_token ON hotel_diagnostico(token);
 CREATE INDEX IF NOT EXISTS idx_hotel_diagnostico_lead_id ON hotel_diagnostico(lead_id);
+
+-- CRM: lead activities log
+CREATE TABLE IF NOT EXISTS lead_activities (
+  id SERIAL PRIMARY KEY,
+  lead_id INTEGER REFERENCES leads(id) ON DELETE CASCADE,
+  type VARCHAR(50) NOT NULL,
+  description TEXT NOT NULL,
+  created_by VARCHAR(255) DEFAULT 'admin',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_lead_activities_lead_id ON lead_activities(lead_id);
+
+-- CRM: lead notes
+CREATE TABLE IF NOT EXISTS lead_notes (
+  id SERIAL PRIMARY KEY,
+  lead_id INTEGER REFERENCES leads(id) ON DELETE CASCADE,
+  content TEXT NOT NULL,
+  created_by VARCHAR(255) DEFAULT 'admin',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_lead_notes_lead_id ON lead_notes(lead_id);
+
+-- CRM: stage change history
+CREATE TABLE IF NOT EXISTS lead_stage_history (
+  id SERIAL PRIMARY KEY,
+  lead_id INTEGER REFERENCES leads(id) ON DELETE CASCADE,
+  from_stage VARCHAR(50),
+  to_stage VARCHAR(50) NOT NULL,
+  changed_by VARCHAR(255) DEFAULT 'admin',
+  changed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_lead_stage_history_lead_id ON lead_stage_history(lead_id);

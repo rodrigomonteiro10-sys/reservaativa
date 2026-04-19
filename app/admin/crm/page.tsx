@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
 import { LeadDetailModal } from "@/components/admin/crm/lead-detail-modal"
 
 interface Lead {
@@ -11,6 +10,10 @@ interface Lead {
   hotel: string
   email: string
   phone: string
+  cidade: string | null
+  quartos: string | null
+  desafio: string | null
+  message: string | null
   created_at: string
   crm_stage: string
   crm_priority: string
@@ -21,9 +24,14 @@ interface Lead {
   token: string | null
   diagnostico_status: string | null
   categoria: string | null
-  adr: number | null
-  ocupacao_media: number | null
+  adr: string | null
+  ocupacao_media: string | null
   faturamento_mensal: string | null
+  tipo_localizacao: string | null
+  publico_principal: string | null
+  canal_principal: string | null
+  activities_count: number
+  notes_count: number
 }
 
 const STAGES = [
@@ -42,6 +50,45 @@ const PRIORITIES: Record<string, { label: string; color: string }> = {
   baixa: { label: 'Baixa', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
 }
 
+function exportToCSV(leads: Lead[]) {
+  const headers = [
+    'ID', 'Hotel', 'Nome', 'Email', 'Telefone', 'Cidade', 'Quartos',
+    'Estágio', 'Prioridade', 'Responsável', 'Próximo Contato',
+    'Valor Esperado', 'Diagnóstico', 'ADR', 'Ocupação', 'Criado em',
+  ]
+
+  const rows = leads.map(l => [
+    l.id,
+    l.hotel || l.name,
+    l.name,
+    l.email,
+    l.phone,
+    l.cidade || '',
+    l.quartos || '',
+    l.crm_stage,
+    l.crm_priority,
+    l.crm_assigned_to || '',
+    l.crm_next_contact ? new Date(l.crm_next_contact).toLocaleDateString('pt-BR') : '',
+    l.crm_expected_value || '',
+    l.diagnostico_status || '',
+    l.adr || '',
+    l.ocupacao_media || '',
+    new Date(l.created_at).toLocaleDateString('pt-BR'),
+  ])
+
+  const csv = [headers, ...rows]
+    .map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))
+    .join('\n')
+
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `leads-crm-${new Date().toISOString().split('T')[0]}.csv`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 export default function CRMPage() {
   const router = useRouter()
   const [leads, setLeads] = useState<Lead[]>([])
@@ -49,23 +96,19 @@ export default function CRMPage() {
   const [selectedLeadId, setSelectedLeadId] = useState<number | null>(null)
   const [draggedLead, setDraggedLead] = useState<Lead | null>(null)
   const [filterPriority, setFilterPriority] = useState<string>('todos')
+  const [searchQuery, setSearchQuery] = useState('')
 
   const fetchLeads = useCallback(async () => {
     try {
       const params = new URLSearchParams()
-      if (filterPriority !== 'todos') {
-        params.set('priority', filterPriority)
-      }
+      if (filterPriority !== 'todos') params.set('priority', filterPriority)
 
-      const response = await fetch(`/api/admin/crm/leads?${params}`, {
-        credentials: 'include',
-      })
-      
+      const response = await fetch(`/api/admin/crm/leads?${params}`, { credentials: 'include' })
+
       if (response.status === 401) {
         router.replace('/admin?redirect=/admin/crm')
         return
       }
-
       if (!response.ok) throw new Error('Erro ao buscar leads')
 
       const data = await response.json()
@@ -77,9 +120,7 @@ export default function CRMPage() {
     }
   }, [router, filterPriority])
 
-  useEffect(() => {
-    fetchLeads()
-  }, [fetchLeads])
+  useEffect(() => { fetchLeads() }, [fetchLeads])
 
   const handleDragStart = (e: React.DragEvent, lead: Lead) => {
     setDraggedLead(lead)
@@ -93,16 +134,9 @@ export default function CRMPage() {
 
   const handleDrop = async (e: React.DragEvent, newStage: string) => {
     e.preventDefault()
-    
-    if (!draggedLead || draggedLead.crm_stage === newStage) {
-      setDraggedLead(null)
-      return
-    }
+    if (!draggedLead || draggedLead.crm_stage === newStage) { setDraggedLead(null); return }
 
-    // Optimistic update
-    setLeads(prev => prev.map(l => 
-      l.id === draggedLead.id ? { ...l, crm_stage: newStage } : l
-    ))
+    setLeads(prev => prev.map(l => l.id === draggedLead.id ? { ...l, crm_stage: newStage } : l))
 
     try {
       const response = await fetch(`/api/admin/crm/leads/${draggedLead.id}`, {
@@ -111,81 +145,76 @@ export default function CRMPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ crm_stage: newStage }),
       })
-
       if (!response.ok) {
-        // Revert on error
-        setLeads(prev => prev.map(l => 
-          l.id === draggedLead.id ? { ...l, crm_stage: draggedLead.crm_stage } : l
-        ))
+        setLeads(prev => prev.map(l => l.id === draggedLead.id ? { ...l, crm_stage: draggedLead.crm_stage } : l))
       }
-    } catch (error) {
-      console.error('Error updating lead stage:', error)
-      // Revert on error
-      setLeads(prev => prev.map(l => 
-        l.id === draggedLead.id ? { ...l, crm_stage: draggedLead.crm_stage } : l
-      ))
+    } catch {
+      setLeads(prev => prev.map(l => l.id === draggedLead.id ? { ...l, crm_stage: draggedLead.crm_stage } : l))
     }
 
     setDraggedLead(null)
   }
 
-  const getLeadsByStage = (stageId: string) => {
-    return leads.filter(lead => (lead.crm_stage || 'novo') === stageId)
+  const filteredLeads = searchQuery.trim()
+    ? leads.filter(l => {
+        const q = searchQuery.toLowerCase()
+        return (
+          l.name?.toLowerCase().includes(q) ||
+          l.hotel?.toLowerCase().includes(q) ||
+          l.email?.toLowerCase().includes(q) ||
+          l.cidade?.toLowerCase().includes(q)
+        )
+      })
+    : leads
+
+  const getLeadsByStage = (stageId: string) =>
+    filteredLeads.filter(lead => (lead.crm_stage || 'novo') === stageId)
+
+  const getStageTotal = (stageId: string) => {
+    const stageLeads = getLeadsByStage(stageId)
+    const total = stageLeads.reduce((sum, l) => sum + (Number(l.crm_expected_value) || 0), 0)
+    return total > 0 ? total : null
   }
 
-  const handleLogout = async () => {
-    await fetch('/api/admin/auth', { method: 'DELETE', credentials: 'include' })
-    router.replace('/admin')
-  }
-
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-    })
-  }
+  const formatDate = (dateStr: string) =>
+    new Date(dateStr).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
 
   return (
-    <div className="min-h-screen bg-navy">
-      {/* Header */}
-      <header className="bg-navy-dark/50 border-b border-gold/20 py-4">
-        <div className="max-w-full mx-auto px-4 flex items-center justify-between">
-          <div>
-            <span className="text-gold font-semibold text-sm">Reserva Ativa</span>
-            <h1 className="text-white text-xl font-bold">CRM - Pipeline de Vendas</h1>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link 
-              href="/admin/leads"
-              className="text-text-muted hover:text-white transition-colors text-sm"
-            >
-              Lista de Leads
-            </Link>
-            <Link 
-              href="/"
-              className="text-text-muted hover:text-white transition-colors text-sm"
-            >
-              Ver site
-            </Link>
+    <div>
+      {/* Toolbar */}
+      <div className="px-4 py-3 border-b border-gold/10 flex flex-wrap items-center gap-3">
+        {/* Search */}
+        <div className="relative flex-1 min-w-48 max-w-72">
+          <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            placeholder="Buscar por hotel, nome, cidade…"
+            className="w-full pl-9 pr-3 py-1.5 bg-navy-dark/60 border border-gold/15 rounded-lg text-white text-sm placeholder-text-muted focus:outline-none focus:border-gold/40"
+          />
+          {searchQuery && (
             <button
-              onClick={handleLogout}
-              className="px-4 py-2 border border-gold/30 text-white text-sm rounded-lg hover:border-gold/60 transition-colors"
+              onClick={() => setSearchQuery('')}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-text-muted hover:text-white"
             >
-              Sair
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
-          </div>
+          )}
         </div>
-      </header>
 
-      {/* Filters */}
-      <div className="px-4 py-4 border-b border-gold/10 flex items-center gap-4">
-        <span className="text-text-muted text-sm">Prioridade:</span>
-        <div className="flex gap-2">
+        {/* Priority filter */}
+        <div className="flex items-center gap-1.5">
+          <span className="text-text-muted text-xs hidden sm:inline">Prioridade:</span>
           {['todos', 'alta', 'media', 'baixa'].map(priority => (
             <button
               key={priority}
               onClick={() => setFilterPriority(priority)}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                 filterPriority === priority
                   ? 'bg-gold text-navy'
                   : 'bg-navy-light/50 text-white hover:bg-navy-light'
@@ -195,9 +224,24 @@ export default function CRMPage() {
             </button>
           ))}
         </div>
-        <span className="text-text-muted text-sm ml-auto">
-          {leads.length} lead{leads.length !== 1 ? 's' : ''}
-        </span>
+
+        <div className="ml-auto flex items-center gap-3">
+          <span className="text-text-muted text-sm">
+            {filteredLeads.length !== leads.length
+              ? `${filteredLeads.length} de ${leads.length} leads`
+              : `${leads.length} lead${leads.length !== 1 ? 's' : ''}`}
+          </span>
+          <button
+            onClick={() => exportToCSV(filteredLeads)}
+            title="Exportar CSV"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-navy-light/50 border border-gold/15 text-text-muted text-xs font-medium rounded-lg hover:border-gold/35 hover:text-white transition-colors"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Exportar CSV
+          </button>
+        </div>
       </div>
 
       {/* Kanban Board */}
@@ -210,10 +254,11 @@ export default function CRMPage() {
           <div className="flex gap-4 min-w-max">
             {STAGES.map(stage => {
               const stageLeads = getLeadsByStage(stage.id)
+              const stageTotal = getStageTotal(stage.id)
               return (
                 <div
                   key={stage.id}
-                  className="w-72 flex-shrink-0"
+                  className="w-72 flex-shrink-0 flex flex-col"
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDrop(e, stage.id)}
                 >
@@ -225,62 +270,138 @@ export default function CRMPage() {
                         {stageLeads.length}
                       </span>
                     </div>
+                    {stageTotal && (
+                      <p className="text-gold/70 text-xs mt-0.5">
+                        R$ {stageTotal.toLocaleString('pt-BR')}
+                      </p>
+                    )}
                   </div>
 
                   {/* Column Content */}
-                  <div className="bg-navy-dark/30 border-x border-b border-gold/20 rounded-b-lg p-2 min-h-[calc(100vh-220px)] space-y-2">
-                    {stageLeads.map(lead => (
-                      <div
-                        key={lead.id}
-                        draggable
-                        onDragStart={(e) => handleDragStart(e, lead)}
-                        onClick={() => setSelectedLeadId(lead.id)}
-                        className={`bg-navy-light border border-gold/20 rounded-lg p-3 cursor-pointer hover:border-gold/40 transition-all ${
-                          draggedLead?.id === lead.id ? 'opacity-50' : ''
-                        }`}
-                      >
-                        {/* Card Header */}
-                        <div className="flex items-start justify-between gap-2 mb-2">
-                          <h4 className="text-white font-medium text-sm leading-tight truncate">
-                            {lead.hotel || lead.name}
-                          </h4>
-                          {lead.crm_priority && (
-                            <span className={`flex-shrink-0 px-1.5 py-0.5 rounded text-xs font-medium border ${PRIORITIES[lead.crm_priority]?.color}`}>
-                              {PRIORITIES[lead.crm_priority]?.label?.[0]}
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Card Body */}
-                        <p className="text-text-muted text-xs mb-2 truncate">{lead.name}</p>
-
-                        {/* Card Footer */}
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="text-text-muted">{formatDate(lead.created_at)}</span>
-                          {lead.crm_expected_value && (
-                            <span className="text-gold font-medium">
-                              R$ {lead.crm_expected_value.toLocaleString('pt-BR')}
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Diagnostico Badge */}
-                        {lead.diagnostico_status === 'completo' && (
-                          <div className="mt-2 pt-2 border-t border-gold/10">
-                            <span className="text-green-400 text-xs flex items-center gap-1">
-                              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                              </svg>
-                              Diagnóstico completo
-                            </span>
+                  <div className="bg-navy-dark/30 border-x border-b border-gold/20 rounded-b-lg p-2 min-h-[calc(100vh-240px)] space-y-2 flex-1">
+                    {stageLeads.map(lead => {
+                      const isOverdue = lead.crm_next_contact && new Date(lead.crm_next_contact) < new Date()
+                      const hotelName = lead.hotel && lead.hotel !== lead.name ? lead.hotel : null
+                      const interactionCount = (Number(lead.activities_count) || 0) + (Number(lead.notes_count) || 0)
+                      return (
+                        <div
+                          key={lead.id}
+                          draggable
+                          onDragStart={(e) => handleDragStart(e, lead)}
+                          onClick={() => setSelectedLeadId(lead.id)}
+                          className={`bg-navy-light border rounded-lg p-3 cursor-pointer hover:border-gold/50 transition-all select-none ${
+                            draggedLead?.id === lead.id ? 'opacity-40 scale-95' : ''
+                          } ${isOverdue ? 'border-red-500/40' : 'border-gold/20'}`}
+                        >
+                          {/* Header: nome + prioridade */}
+                          <div className="flex items-start justify-between gap-2 mb-1">
+                            <h4 className="text-white font-semibold text-sm leading-tight truncate">
+                              {hotelName || lead.name}
+                            </h4>
+                            {lead.crm_priority && (
+                              <span className={`flex-shrink-0 px-1.5 py-0.5 rounded text-xs font-bold border ${PRIORITIES[lead.crm_priority]?.color}`}>
+                                {PRIORITIES[lead.crm_priority]?.label}
+                              </span>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    ))}
+
+                          {hotelName && (
+                            <p className="text-text-muted text-xs truncate mb-1">{lead.name}</p>
+                          )}
+
+                          {/* Info badges */}
+                          <div className="flex flex-wrap gap-1 my-2">
+                            {lead.cidade && (
+                              <span className="inline-flex items-center gap-1 bg-navy-dark/60 text-text-muted text-xs px-1.5 py-0.5 rounded">
+                                📍 {lead.cidade}
+                              </span>
+                            )}
+                            {lead.quartos && (
+                              <span className="inline-flex items-center gap-1 bg-navy-dark/60 text-text-muted text-xs px-1.5 py-0.5 rounded">
+                                🛏 {lead.quartos} qts
+                              </span>
+                            )}
+                            {lead.adr && (
+                              <span className="inline-flex items-center gap-1 bg-navy-dark/60 text-gold/70 text-xs px-1.5 py-0.5 rounded">
+                                ADR R${parseFloat(lead.adr).toFixed(0)}
+                              </span>
+                            )}
+                            {lead.ocupacao_media && (
+                              <span className="inline-flex items-center gap-1 bg-navy-dark/60 text-text-muted text-xs px-1.5 py-0.5 rounded">
+                                {parseFloat(lead.ocupacao_media).toFixed(0)}% ocup.
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Desafio snippet */}
+                          {(lead.desafio || lead.message) && (
+                            <p className="text-text-muted text-xs italic truncate mb-1 border-l-2 border-gold/20 pl-2">
+                              &ldquo;{lead.desafio || lead.message}&rdquo;
+                            </p>
+                          )}
+
+                          {/* WhatsApp */}
+                          <a
+                            href={`https://wa.me/${lead.phone?.replace(/\D/g, '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={e => e.stopPropagation()}
+                            className="inline-flex items-center gap-1 text-green-400 text-xs hover:text-green-300 transition-colors mb-2"
+                          >
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                              <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.121 1.532 5.847L.057 23.882l6.204-1.448A11.934 11.934 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.501-5.201-1.375l-.373-.221-3.861.901.953-3.745-.243-.386A9.937 9.937 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+                            </svg>
+                            {lead.phone}
+                          </a>
+
+                          {/* Footer */}
+                          <div className="flex items-center justify-between text-xs pt-2 border-t border-gold/10">
+                            <span className="text-text-muted">{formatDate(lead.created_at)}</span>
+                            <div className="flex items-center gap-2">
+                              {interactionCount > 0 && (
+                                <span className="text-text-muted flex items-center gap-1">
+                                  💬 {interactionCount}
+                                </span>
+                              )}
+                              {lead.crm_expected_value && (
+                                <span className="text-gold font-semibold">
+                                  R$ {Number(lead.crm_expected_value).toLocaleString('pt-BR')}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Status badges */}
+                          <div className="flex flex-wrap gap-1.5 mt-2">
+                            {isOverdue && (
+                              <span className="text-red-400 text-xs flex items-center gap-1">
+                                ⏰ Follow-up atrasado
+                              </span>
+                            )}
+                            {lead.crm_next_contact && !isOverdue && (
+                              <span className="text-yellow-400 text-xs">
+                                📅 {new Date(lead.crm_next_contact).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}
+                              </span>
+                            )}
+                            {lead.diagnostico_status === 'completo' && (
+                              <span className="text-green-400 text-xs flex items-center gap-1">
+                                ✓ Diagnóstico
+                              </span>
+                            )}
+                            {lead.diagnostico_status === 'rascunho' && (
+                              <span className="text-yellow-400/70 text-xs">
+                                ⚡ Diagnóstico pendente
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )
+                    })}
 
                     {stageLeads.length === 0 && (
                       <div className="text-text-muted text-sm text-center py-8 border-2 border-dashed border-gold/10 rounded-lg">
-                        Arraste leads aqui
+                        {searchQuery ? 'Nenhum resultado' : 'Arraste leads aqui'}
                       </div>
                     )}
                   </div>

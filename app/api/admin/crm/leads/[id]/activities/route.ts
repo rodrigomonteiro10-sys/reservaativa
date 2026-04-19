@@ -38,8 +38,8 @@ export async function POST(
     }
 
     const result = await sql`
-      INSERT INTO lead_activities (lead_id, type, description, created_by)
-      VALUES (${leadId}, ${body.type}, ${body.description}, ${body.created_by || 'admin'})
+      INSERT INTO lead_activities (lead_id, type, description, author)
+      VALUES (${leadId}, ${body.type}, ${body.description}, ${'admin'})
       RETURNING *
     `
 

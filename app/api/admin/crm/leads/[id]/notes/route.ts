@@ -38,15 +38,14 @@ export async function POST(
     }
 
     const result = await sql`
-      INSERT INTO lead_notes (lead_id, content, created_by)
-      VALUES (${leadId}, ${body.content}, ${body.created_by || 'admin'})
+      INSERT INTO lead_notes (lead_id, content, author)
+      VALUES (${leadId}, ${body.content}, ${'admin'})
       RETURNING *
     `
 
-    // Also create an activity for the note
     await sql`
-      INSERT INTO lead_activities (lead_id, type, description, created_by)
-      VALUES (${leadId}, 'note', ${'Nota adicionada: ' + body.content.substring(0, 50) + (body.content.length > 50 ? '...' : '')}, ${body.created_by || 'admin'})
+      INSERT INTO lead_activities (lead_id, type, description, author)
+      VALUES (${leadId}, 'note', ${'Nota adicionada: ' + body.content.substring(0, 50) + (body.content.length > 50 ? '...' : '')}, ${'admin'})
     `
 
     return NextResponse.json({ success: true, note: result[0] })

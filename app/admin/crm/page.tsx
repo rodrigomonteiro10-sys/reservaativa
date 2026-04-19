@@ -42,14 +42,6 @@ const PRIORITIES: Record<string, { label: string; color: string }> = {
   baixa: { label: 'Baixa', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
 }
 
-function getAuthHeaders(): HeadersInit {
-  const token = typeof window !== 'undefined' ? sessionStorage.getItem('admin_token') : null
-  return {
-    'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-  }
-}
-
 export default function CRMPage() {
   const router = useRouter()
   const [leads, setLeads] = useState<Lead[]>([])
@@ -66,7 +58,7 @@ export default function CRMPage() {
       }
 
       const response = await fetch(`/api/admin/crm/leads?${params}`, {
-        headers: getAuthHeaders()
+        credentials: 'include',
       })
       
       if (response.status === 401) {
@@ -115,7 +107,8 @@ export default function CRMPage() {
     try {
       const response = await fetch(`/api/admin/crm/leads/${draggedLead.id}`, {
         method: 'PATCH',
-        headers: getAuthHeaders(),
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ crm_stage: newStage }),
       })
 
@@ -140,8 +133,8 @@ export default function CRMPage() {
     return leads.filter(lead => (lead.crm_stage || 'novo') === stageId)
   }
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('admin_token')
+  const handleLogout = async () => {
+    await fetch('/api/admin/auth', { method: 'DELETE', credentials: 'include' })
     router.replace('/admin')
   }
 

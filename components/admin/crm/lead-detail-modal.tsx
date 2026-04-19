@@ -88,14 +88,6 @@ const ACTIVITY_TYPES = [
   { id: 'outro', label: 'Outro', icon: '📌' },
 ]
 
-function getAuthHeaders(): HeadersInit {
-  const token = typeof window !== 'undefined' ? sessionStorage.getItem('admin_token') : null
-  return {
-    'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-  }
-}
-
 export function LeadDetailModal({ leadId, onClose, onUpdate }: LeadDetailModalProps) {
   const [lead, setLead] = useState<LeadDetail | null>(null)
   const [activities, setActivities] = useState<Activity[]>([])
@@ -127,7 +119,7 @@ export function LeadDetailModal({ leadId, onClose, onUpdate }: LeadDetailModalPr
   async function fetchLeadDetails() {
     try {
       const response = await fetch(`/api/admin/crm/leads/${leadId}`, {
-        headers: getAuthHeaders()
+        credentials: 'include',
       })
       if (!response.ok) throw new Error('Erro ao buscar lead')
       
@@ -157,7 +149,8 @@ export function LeadDetailModal({ leadId, onClose, onUpdate }: LeadDetailModalPr
     try {
       const response = await fetch(`/api/admin/crm/leads/${leadId}`, {
         method: 'PATCH',
-        headers: getAuthHeaders(),
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ [field]: value || null }),
       })
       
@@ -180,7 +173,8 @@ export function LeadDetailModal({ leadId, onClose, onUpdate }: LeadDetailModalPr
     try {
       const response = await fetch(`/api/admin/crm/leads/${leadId}/activities`, {
         method: 'POST',
-        headers: getAuthHeaders(),
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newActivity),
       })
       
@@ -202,7 +196,8 @@ export function LeadDetailModal({ leadId, onClose, onUpdate }: LeadDetailModalPr
     try {
       const response = await fetch(`/api/admin/crm/leads/${leadId}/notes`, {
         method: 'POST',
-        headers: getAuthHeaders(),
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content: newNote }),
       })
       

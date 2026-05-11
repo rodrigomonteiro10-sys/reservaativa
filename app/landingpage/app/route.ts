@@ -159,6 +159,25 @@ export async function GET() {
   .hero-ctas {
     display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
   }
+  .btn-whatsapp {
+    background: #25D366;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 18px 40px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .btn-whatsapp:hover { background: #1ebe5c; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(37,211,102,0.35); }
+
   .btn-primary {
     background: var(--gold);
     color: var(--navy);
@@ -703,7 +722,7 @@ export async function GET() {
     .hero h1 { font-size: clamp(32px, 9vw, 48px); }
     .hero p.sub { font-size: 16px; }
     .hero-ctas { flex-direction: column; align-items: center; gap: 12px; }
-    .btn-primary, .btn-outline { width: 100%; max-width: 320px; text-align: center; padding: 16px 24px; }
+    .btn-primary, .btn-outline, .btn-whatsapp { width: 100%; max-width: 320px; justify-content: center; padding: 16px 24px; }
     .hero-stats { gap: 16px; justify-content: space-around; }
     .hero-stat .num { font-size: 26px; }
     .hero-divider { display: none; }
@@ -773,7 +792,10 @@ export async function GET() {
     </svg>
     RESERVA <span>ATIVA</span><em class="app-tag">APP</em>
   </a>
-  <a class="nav-cta" href="https://wa.me/5524999720763?text=Ol%C3%A1%21+Quero+agendar+uma+demonstra%C3%A7%C3%A3o+do+Reserva+Ativa+App." target="_blank" rel="noopener noreferrer">Quero uma Demo</a>
+  <a class="btn-whatsapp" href="https://wa.me/5524999720763?text=Ol%C3%A1%21+Quero+agendar+uma+demonstra%C3%A7%C3%A3o+do+Reserva+Ativa+App." target="_blank" rel="noopener noreferrer" style="padding:10px 22px; font-size:13px;">
+    <svg width="16" height="16" viewBox="0 0 44 44" fill="none"><path d="M22 9.5C15.096 9.5 9.5 15.096 9.5 22c0 2.52.69 4.876 1.89 6.893L9.5 34.5l5.76-1.854A12.44 12.44 0 0022 34.5c6.904 0 12.5-5.596 12.5-12.5S28.904 9.5 22 9.5z" fill="white"/><path d="M28.8 25.58c-.32-.16-1.9-.938-2.195-1.044-.296-.108-.51-.16-.724.16-.215.32-.83 1.044-1.018 1.26-.187.213-.375.24-.695.08-.32-.16-1.353-.5-2.578-1.592-.953-.85-1.596-1.9-1.784-2.22-.187-.32-.02-.494.14-.654.144-.144.32-.375.482-.562.16-.188.213-.32.32-.534.107-.213.054-.4-.027-.56-.08-.16-.722-1.74-.99-2.38-.26-.624-.524-.54-.722-.548a12.93 12.93 0 00-.615-.01c-.214 0-.563.08-.857.4-.295.32-1.124 1.096-1.124 2.674 0 1.578 1.15 3.104 1.31 3.318.16.214 2.263 3.456 5.486 4.848.767.332 1.366.53 1.832.678.77.245 1.47.21 2.024.128.617-.093 1.9-.777 2.168-1.527.267-.75.267-1.394.187-1.527-.08-.133-.294-.213-.614-.373z" fill="#25D366"/></svg>
+    Agendar Demonstração
+  </a>
 </nav>
 
 <!-- HERO -->
@@ -795,7 +817,10 @@ export async function GET() {
       CRM completo + IA treinada com os dados do seu hotel. Atende no WhatsApp, Instagram e site. Qualifica. Propõe. Fecha. E avisa o seu vendedor na hora certa.
     </p>
     <div class="hero-ctas">
-      <a class="btn-primary" href="https://wa.me/5524999720763?text=Ol%C3%A1%21+Quero+agendar+uma+demonstra%C3%A7%C3%A3o+do+Reserva+Ativa+App." target="_blank" rel="noopener noreferrer">Agendar Demonstração</a>
+      <a class="btn-whatsapp" href="https://wa.me/5524999720763?text=Ol%C3%A1%21+Quero+agendar+uma+demonstra%C3%A7%C3%A3o+do+Reserva+Ativa+App." target="_blank" rel="noopener noreferrer">
+        <svg width="20" height="20" viewBox="0 0 44 44" fill="none"><path d="M22 9.5C15.096 9.5 9.5 15.096 9.5 22c0 2.52.69 4.876 1.89 6.893L9.5 34.5l5.76-1.854A12.44 12.44 0 0022 34.5c6.904 0 12.5-5.596 12.5-12.5S28.904 9.5 22 9.5z" fill="white"/><path d="M28.8 25.58c-.32-.16-1.9-.938-2.195-1.044-.296-.108-.51-.16-.724.16-.215.32-.83 1.044-1.018 1.26-.187.213-.375.24-.695.08-.32-.16-1.353-.5-2.578-1.592-.953-.85-1.596-1.9-1.784-2.22-.187-.32-.02-.494.14-.654.144-.144.32-.375.482-.562.16-.188.213-.32.32-.534.107-.213.054-.4-.027-.56-.08-.16-.722-1.74-.99-2.38-.26-.624-.524-.54-.722-.548a12.93 12.93 0 00-.615-.01c-.214 0-.563.08-.857.4-.295.32-1.124 1.096-1.124 2.674 0 1.578 1.15 3.104 1.31 3.318.16.214 2.263 3.456 5.486 4.848.767.332 1.366.53 1.832.678.77.245 1.47.21 2.024.128.617-.093 1.9-.777 2.168-1.527.267-.75.267-1.394.187-1.527-.08-.133-.294-.213-.614-.373z" fill="#25D366"/></svg>
+        Agendar Demonstração
+      </a>
       <button class="btn-outline" onclick="document.getElementById('como-funciona').scrollIntoView({behavior:'smooth'})">Ver Como Funciona</button>
     </div>
     <div class="hero-stats">
@@ -1235,7 +1260,10 @@ export async function GET() {
       <div class="gold-line center"></div>
       <h2 class="section-title">Veja o sistema funcionando com os dados do seu hotel</h2>
       <p class="section-sub">Agende uma demonstração gratuita. Mostramos o dashboard ao vivo, a IA em ação e o CRM configurado para o seu perfil.</p>
-      <a class="btn-primary" href="https://wa.me/5524999720763?text=Ol%C3%A1%21+Quero+agendar+uma+demonstra%C3%A7%C3%A3o+do+Reserva+Ativa+App." target="_blank" rel="noopener noreferrer" style="display:inline-block; margin-bottom:16px;">Falar no WhatsApp</a>
+      <a class="btn-whatsapp" href="https://wa.me/5524999720763?text=Ol%C3%A1%21+Quero+agendar+uma+demonstra%C3%A7%C3%A3o+do+Reserva+Ativa+App." target="_blank" rel="noopener noreferrer" style="margin-bottom:16px;">
+        <svg width="20" height="20" viewBox="0 0 44 44" fill="none"><path d="M22 9.5C15.096 9.5 9.5 15.096 9.5 22c0 2.52.69 4.876 1.89 6.893L9.5 34.5l5.76-1.854A12.44 12.44 0 0022 34.5c6.904 0 12.5-5.596 12.5-12.5S28.904 9.5 22 9.5z" fill="white"/><path d="M28.8 25.58c-.32-.16-1.9-.938-2.195-1.044-.296-.108-.51-.16-.724.16-.215.32-.83 1.044-1.018 1.26-.187.213-.375.24-.695.08-.32-.16-1.353-.5-2.578-1.592-.953-.85-1.596-1.9-1.784-2.22-.187-.32-.02-.494.14-.654.144-.144.32-.375.482-.562.16-.188.213-.32.32-.534.107-.213.054-.4-.027-.56-.08-.16-.722-1.74-.99-2.38-.26-.624-.524-.54-.722-.548a12.93 12.93 0 00-.615-.01c-.214 0-.563.08-.857.4-.295.32-1.124 1.096-1.124 2.674 0 1.578 1.15 3.104 1.31 3.318.16.214 2.263 3.456 5.486 4.848.767.332 1.366.53 1.832.678.77.245 1.47.21 2.024.128.617-.093 1.9-.777 2.168-1.527.267-.75.267-1.394.187-1.527-.08-.133-.294-.213-.614-.373z" fill="#25D366"/></svg>
+        Agendar Demonstração
+      </a>
       <p class="form-note">Sem compromisso. Resposta em até 2 horas úteis.</p>
     </div>
   </div>

@@ -140,10 +140,13 @@ export async function GET() {
   .hero h1 {
     font-family: 'Montserrat', sans-serif;
     font-weight: 900;
-    font-size: clamp(40px, 6vw, 72px);
-    line-height: 1.05;
+    font-size: clamp(36px, 5.5vw, 68px);
+    line-height: 1.1;
     letter-spacing: -0.02em;
     margin-bottom: 28px;
+    max-width: 820px;
+    margin-left: auto;
+    margin-right: auto;
   }
   .hero h1 .gold { color: var(--gold); }
   .hero p.sub {
@@ -787,11 +790,7 @@ export async function GET() {
       </svg>
       Reserva Ativa App · Inteligência Comercial para Hotéis
     </div>
-    <h1>
-      O seu hotel merece um<br>
-      time de vendas que<br>
-      <span class="gold">trabalha 24h por dia</span>
-    </h1>
+    <h1>O seu hotel merece um time de vendas que <span class="gold">trabalha 24h por dia</span></h1>
     <p class="sub">
       CRM completo + IA treinada com os dados do seu hotel. Atende no WhatsApp, Instagram e site. Qualifica. Propõe. Fecha. E avisa o seu vendedor na hora certa.
     </p>

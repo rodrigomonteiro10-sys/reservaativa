@@ -5,7 +5,7 @@ export async function GET() {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#050058">
-<title>Reserva Ativa App — CRM + IA para Hotéis-Fazenda</title>
+<title>Reserva Ativa App: CRM e IA para Hotéis-Fazenda</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -506,7 +506,7 @@ export async function GET() {
     line-height: 1.5;
   }
   .feature-card li::before {
-    content: '—';
+    content: '·';
     position: absolute; left: 0;
     color: var(--gold);
     font-size: 10px;
@@ -829,7 +829,7 @@ export async function GET() {
     <div class="text-center reveal">
       <div class="section-label">O problema que você conhece bem</div>
       <div class="gold-line center"></div>
-      <h2 class="section-title">O dinheiro que fica na mesa — todos os dias</h2>
+      <h2 class="section-title">O dinheiro que fica na mesa. Todos os dias.</h2>
       <p class="section-sub">Leads chegam. Ninguém faz follow-up. O hotel continua operando na metade da capacidade.</p>
     </div>
     <div class="dores-grid">
@@ -851,12 +851,12 @@ export async function GET() {
       <div class="dor-card reveal reveal-delay-1">
         <div class="dor-icon">💸</div>
         <h3>Dependência das OTAs</h3>
-        <p>18–25% de comissão por reserva. O cliente fica na base deles, não na sua. Você constrói um negócio dependente.</p>
+        <p>18 a 25% de comissão por reserva. O cliente fica na base deles, não na sua. Você constrói um negócio dependente.</p>
       </div>
       <div class="dor-card reveal reveal-delay-2">
         <div class="dor-icon">⌛</div>
         <h3>Recepção sobrecarregada</h3>
-        <p>A mesma equipe que faz check-in também deveria vender. Não funciona — e todo mundo sabe disso.</p>
+        <p>A mesma equipe que faz check-in também deveria vender. Não funciona. E todo mundo sabe disso.</p>
       </div>
       <div class="dor-card reveal reveal-delay-3">
         <div class="dor-icon">🗂️</div>
@@ -875,13 +875,13 @@ export async function GET() {
         <div class="section-label">A solução</div>
         <div class="gold-line"></div>
         <h2 class="section-title">Uma plataforma. Dois motores. Resultado real.</h2>
-        <p class="section-sub">O Reserva Ativa App combina um CRM profissional com uma IA treinada com os dados do seu hotel — funcionando em paralelo, 24h por dia.</p>
+        <p class="section-sub">O Reserva Ativa App combina um CRM profissional com uma IA treinada com os dados do seu hotel, funcionando em paralelo, 24h por dia.</p>
         <div class="solucao-pillars">
           <div class="pillar">
             <div class="pillar-num">01</div>
             <div class="pillar-text">
               <h4>IA de Atendimento e Vendas</h4>
-              <p>Responde leads no WhatsApp, Instagram e site usando os seus preços, seus quartos e suas regras. Qualifica, propõe e fecha — ou avisa o vendedor na hora certa.</p>
+              <p>Responde leads no WhatsApp, Instagram e site usando os seus preços, seus quartos e suas regras. Qualifica, propõe e fecha. Ou avisa o vendedor na hora certa.</p>
             </div>
           </div>
           <div class="pillar">
@@ -895,7 +895,7 @@ export async function GET() {
             <div class="pillar-num">03</div>
             <div class="pillar-text">
               <h4>Dashboard Executivo</h4>
-              <p>4 KPIs principais, funil visual, alertas de follow-up atrasado e relatórios de conversão — tudo num painel que você acessa de qualquer lugar.</p>
+              <p>4 KPIs principais, funil visual, alertas de follow-up atrasado e relatórios de conversão. Tudo num painel que você acessa de qualquer lugar.</p>
             </div>
           </div>
         </div>
@@ -928,7 +928,7 @@ export async function GET() {
               </div>
             </div>
             <div class="mock-funnel">
-              <div class="mock-funnel-title">Funil de Vendas — 7 Estágios</div>
+              <div class="mock-funnel-title">Funil de Vendas: 7 Estágios</div>
               <div class="mock-stage">
                 <span class="mock-stage-label">Novo Lead</span>
                 <div class="mock-stage-bar-wrap"><div class="mock-stage-bar" style="width:100%"></div></div>
@@ -1023,7 +1023,7 @@ export async function GET() {
     <div class="ia-flow">
       <div class="text-center" style="margin-bottom:32px; margin-top:60px;">
         <div class="section-label">Metodologia de Vendas Consultiva</div>
-        <h3 style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:22px;">O fluxo da conversa — 5 etapas</h3>
+        <h3 style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:22px;">O fluxo da conversa em 5 etapas</h3>
       </div>
       <div class="ia-step">
         <div class="ia-step-num">01</div>
@@ -1036,7 +1036,7 @@ export async function GET() {
         <div class="ia-step-num">02</div>
         <div class="ia-step-content">
           <h4>Qualificação invisível</h4>
-          <p>2 perguntas naturais para entender a ocasião, data, número de pessoas e cidade de origem — sem parecer formulário.</p>
+          <p>2 perguntas naturais para entender a ocasião, data, número de pessoas e cidade de origem, sem parecer formulário.</p>
         </div>
       </div>
       <div class="ia-step">
@@ -1057,7 +1057,7 @@ export async function GET() {
         <div class="ia-step-num">05</div>
         <div class="ia-step-content">
           <h4>Fechamento ou escalação inteligente</h4>
-          <p>Confirma dados e envia link de reserva — ou escalona para o vendedor humano quando necessário, com notificação imediata no WhatsApp.</p>
+          <p>Confirma dados e envia link de reserva. Ou escalona para o vendedor humano quando necessário, com notificação imediata no WhatsApp.</p>
         </div>
       </div>
     </div>
@@ -1200,17 +1200,17 @@ export async function GET() {
       <div class="dif-item reveal reveal-delay-1">
         <div class="dif-tag">Diferencial 01</div>
         <h3>IA treinada com os dados do seu hotel</h3>
-        <p>Não é um bot genérico. Ela sabe os seus preços, seus quartos e suas regras. E só usa o que você configurou — jamais inventa.</p>
+        <p>Não é um bot genérico. Ela sabe os seus preços, seus quartos e suas regras. E só usa o que você configurou. Jamais inventa.</p>
       </div>
       <div class="dif-item reveal reveal-delay-2">
         <div class="dif-tag">Diferencial 02</div>
         <h3>Metodologia de vendas embutida</h3>
-        <p>A IA usa SPIN selling adaptado para hotelaria. Não é um FAQ glorificado — é uma consultora de vendas consultiva.</p>
+        <p>A IA usa SPIN selling adaptado para hotelaria. Não é um FAQ glorificado. É uma consultora de vendas consultiva.</p>
       </div>
       <div class="dif-item reveal reveal-delay-3">
         <div class="dif-tag">Diferencial 03</div>
         <h3>Multi-canal unificado</h3>
-        <p>WhatsApp + Instagram + site em um único pipeline. O lead entra por onde quiser — o processo é sempre o mesmo.</p>
+        <p>WhatsApp + Instagram + site em um único pipeline. O lead entra por onde quiser. O processo é sempre o mesmo.</p>
       </div>
       <div class="dif-item reveal reveal-delay-1">
         <div class="dif-tag">Diferencial 04</div>
@@ -1220,7 +1220,7 @@ export async function GET() {
       <div class="dif-item reveal reveal-delay-2">
         <div class="dif-tag">Diferencial 05</div>
         <h3>Escalação inteligente com notificação</h3>
-        <p>A IA sabe quando ceder. E avisa na hora certa — com nome do lead e motivo da escalação direto no seu WhatsApp.</p>
+        <p>A IA sabe quando ceder. E avisa na hora certa, com nome do lead e motivo da escalação direto no seu WhatsApp.</p>
       </div>
       <div class="dif-item reveal reveal-delay-3">
         <div class="dif-tag">Diferencial 06</div>
@@ -1252,8 +1252,8 @@ export async function GET() {
             <h4>O que ele vive todo dia</h4>
             <ul>
               <li>Orçamentos acumulam sem retorno na recepção</li>
-              <li>Hotel cheio só no feriado — resto do ano pela metade</li>
-              <li>Paga 18–25% ao Booking e odeia a dependência</li>
+              <li>Hotel cheio só no feriado. No resto do ano, pela metade</li>
+              <li>Paga 18 a 25% ao Booking e odeia a dependência</li>
               <li>Não tem dados reais sobre taxa de conversão</li>
             </ul>
           </div>
@@ -1272,7 +1272,7 @@ export async function GET() {
             <ul>
               <li>Acumula gestão, atendimento e vendas sem conseguir escalar</li>
               <li>Perde reservas por falta de follow-up estruturado</li>
-              <li>Não tem CRM — histórico some quando funcionário sai</li>
+              <li>Não tem CRM. O histórico some quando o funcionário sai</li>
               <li>Quer dados para mostrar ao sócio e tomar decisões</li>
             </ul>
           </div>

@@ -429,7 +429,7 @@ export async function GET() {
     transition: all 0.3s;
   }
   .canal-card:hover { border-color: var(--gold); transform: translateY(-6px); }
-  .canal-icon { font-size: 36px; margin-bottom: 16px; }
+  .canal-icon { margin-bottom: 20px; display: flex; justify-content: center; }
   .canal-card h3 {
     font-family: 'Montserrat', sans-serif;
     font-weight: 700; font-size: 15px; margin-bottom: 10px;
@@ -974,17 +974,47 @@ export async function GET() {
 
     <div class="ia-canais">
       <div class="canal-card reveal reveal-delay-1">
-        <div class="canal-icon">💬</div>
+        <div class="canal-icon">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="22" cy="22" r="22" fill="#25D366"/>
+            <path d="M22 8C14.268 8 8 14.268 8 22c0 2.734.74 5.3 2.034 7.51L8.5 36l6.69-1.512A13.93 13.93 0 0022 36c7.732 0 14-6.268 14-14S29.732 8 22 8z" fill="#25D366"/>
+            <path d="M22 9.5C15.096 9.5 9.5 15.096 9.5 22c0 2.52.69 4.876 1.89 6.893L9.5 34.5l5.76-1.854A12.44 12.44 0 0022 34.5c6.904 0 12.5-5.596 12.5-12.5S28.904 9.5 22 9.5z" fill="white" fill-opacity="0.15"/>
+            <path d="M28.8 25.58c-.32-.16-1.9-.938-2.195-1.044-.296-.108-.51-.16-.724.16-.215.32-.83 1.044-1.018 1.26-.187.213-.375.24-.695.08-.32-.16-1.353-.5-2.578-1.592-.953-.85-1.596-1.9-1.784-2.22-.187-.32-.02-.494.14-.654.144-.144.32-.375.482-.562.16-.188.213-.32.32-.534.107-.213.054-.4-.027-.56-.08-.16-.722-1.74-.99-2.38-.26-.624-.524-.54-.722-.548a12.93 12.93 0 00-.615-.01c-.214 0-.563.08-.857.4-.295.32-1.124 1.096-1.124 2.674 0 1.578 1.15 3.104 1.31 3.318.16.214 2.263 3.456 5.486 4.848.767.332 1.366.53 1.832.678.77.245 1.47.21 2.024.128.617-.093 1.9-.777 2.168-1.527.267-.75.267-1.394.187-1.527-.08-.133-.294-.213-.614-.373z" fill="white"/>
+          </svg>
+        </div>
         <h3>WhatsApp</h3>
         <p>Integração direta com o número do hotel. Responde automaticamente, qualifica e propõe reserva.</p>
       </div>
       <div class="canal-card reveal reveal-delay-2">
-        <div class="canal-icon">📷</div>
+        <div class="canal-icon">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="ig-bg" x1="0" y1="44" x2="44" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FFDC80"/>
+                <stop offset="25%" stop-color="#FCAF45"/>
+                <stop offset="50%" stop-color="#F77737"/>
+                <stop offset="75%" stop-color="#C13584"/>
+                <stop offset="100%" stop-color="#833AB4"/>
+              </linearGradient>
+            </defs>
+            <rect width="44" height="44" rx="12" fill="url(#ig-bg)"/>
+            <rect x="9" y="9" width="26" height="26" rx="7" stroke="white" stroke-width="2.5" fill="none"/>
+            <circle cx="22" cy="22" r="7" stroke="white" stroke-width="2.5" fill="none"/>
+            <circle cx="30.5" cy="13.5" r="2" fill="white"/>
+          </svg>
+        </div>
         <h3>Instagram</h3>
         <p>Responde nas DMs. Capta o telefone do lead e sincroniza com o CRM automaticamente.</p>
       </div>
       <div class="canal-card reveal reveal-delay-3">
-        <div class="canal-icon">🌐</div>
+        <div class="canal-icon">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="22" cy="22" r="20" stroke="#D4AF37" stroke-width="2" fill="none"/>
+            <ellipse cx="22" cy="22" rx="7.5" ry="20" stroke="#D4AF37" stroke-width="2" fill="none"/>
+            <line x1="2" y1="22" x2="42" y2="22" stroke="#D4AF37" stroke-width="2"/>
+            <path d="M5 14.5h34M5 29.5h34" stroke="#D4AF37" stroke-width="1.5" stroke-dasharray="3 2"/>
+          </svg>
+        </div>
         <h3>Site</h3>
         <p>Widget de chat instalado com um único snippet de código. Sem complicação técnica.</p>
       </div>

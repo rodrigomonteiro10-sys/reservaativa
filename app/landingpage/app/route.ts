@@ -47,13 +47,29 @@ export async function GET() {
     transition: padding 0.3s;
   }
   .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 800;
-    font-size: 18px;
+    font-size: 17px;
     letter-spacing: 0.08em;
     color: var(--offwhite);
+    text-decoration: none;
   }
+  .nav-logo .logo-mark { flex-shrink: 0; }
   .nav-logo span { color: var(--gold); }
+  .nav-logo .app-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--gold);
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-border);
+    padding: 2px 7px;
+    align-self: center;
+    margin-left: 2px;
+  }
   .nav-cta {
     background: var(--gold);
     color: var(--navy);
@@ -651,9 +667,12 @@ export async function GET() {
     flex-wrap: wrap; gap: 16px;
   }
   .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 800;
-    font-size: 16px;
+    font-size: 15px;
     letter-spacing: 0.06em;
     color: var(--offwhite);
   }
@@ -742,7 +761,15 @@ export async function GET() {
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">RESERVA <span>ATIVA</span> APP</div>
+  <a href="/" class="nav-logo">
+    <svg class="logo-mark" width="26" height="33" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M14 1C7.373 1 2 6.373 2 13c0 4.2 2.1 7.9 5.4 10.2L14 35l6.6-11.8C23.9 20.9 26 17.2 26 13 26 6.373 20.627 1 14 1z" fill="#D4AF37"/>
+      <rect x="7" y="16.5" width="3.2" height="5" rx="0.5" fill="#050058"/>
+      <rect x="12" y="13" width="3.2" height="8.5" rx="0.5" fill="#050058"/>
+      <rect x="17" y="9.5" width="3.2" height="12" rx="0.5" fill="#050058"/>
+    </svg>
+    RESERVA <span>ATIVA</span><em class="app-tag">APP</em>
+  </a>
   <button class="nav-cta" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Quero uma Demo</button>
 </nav>
 
@@ -751,7 +778,15 @@ export async function GET() {
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <div class="hero-badge">Novo Produto · Reserva Ativa</div>
+    <div class="hero-badge">
+      <svg width="14" height="18" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:2px" aria-hidden="true">
+        <path d="M14 1C7.373 1 2 6.373 2 13c0 4.2 2.1 7.9 5.4 10.2L14 35l6.6-11.8C23.9 20.9 26 17.2 26 13 26 6.373 20.627 1 14 1z" fill="#D4AF37"/>
+        <rect x="7" y="16.5" width="3.2" height="5" rx="0.5" fill="#050058"/>
+        <rect x="12" y="13" width="3.2" height="8.5" rx="0.5" fill="#050058"/>
+        <rect x="17" y="9.5" width="3.2" height="12" rx="0.5" fill="#050058"/>
+      </svg>
+      Reserva Ativa App · Inteligência Comercial para Hotéis
+    </div>
     <h1>
       O seu hotel merece um<br>
       time de vendas que<br>
@@ -1236,8 +1271,16 @@ export async function GET() {
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">RESERVA <span>ATIVA</span></div>
-  <p>Inteligência comercial que preenche vagas e antecipa receitas.</p>
+  <div class="footer-logo">
+    <svg width="22" height="28" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M14 1C7.373 1 2 6.373 2 13c0 4.2 2.1 7.9 5.4 10.2L14 35l6.6-11.8C23.9 20.9 26 17.2 26 13 26 6.373 20.627 1 14 1z" fill="#D4AF37"/>
+      <rect x="7" y="16.5" width="3.2" height="5" rx="0.5" fill="#050058"/>
+      <rect x="12" y="13" width="3.2" height="8.5" rx="0.5" fill="#050058"/>
+      <rect x="17" y="9.5" width="3.2" height="12" rx="0.5" fill="#050058"/>
+    </svg>
+    RESERVA <span>ATIVA</span>
+  </div>
+  <p style="color:rgba(250,249,246,0.5); font-style:italic; letter-spacing:0.02em">Inteligência comercial que preenche vagas e antecipa receitas.</p>
   <p style="color:var(--text-dim)">© 2026 Reserva Ativa · Todos os direitos reservados</p>
 </footer>
 

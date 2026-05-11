@@ -4,6 +4,7 @@ export async function GET() {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050058">
 <title>Reserva Ativa App — CRM + IA para Hotéis-Fazenda</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -422,7 +423,7 @@ export async function GET() {
   /* ─── DIFERENCIAIS ─── */
   .dif-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
     gap: 2px;
     margin-top: 60px;
     border: 1px solid var(--gold-border);
@@ -670,13 +671,63 @@ export async function GET() {
   .reveal-delay-3 { transition-delay: 0.3s; }
 
   @media(max-width:768px) {
-    nav { padding: 16px 24px; }
-    section { padding: 70px 24px; }
-    .hero { padding: 100px 24px 60px; }
+    nav { padding: 16px 20px; }
+    .nav-logo { font-size: 15px; }
+    .nav-cta { padding: 10px 18px; font-size: 12px; }
+
+    section { padding: 64px 20px; }
+    .hero { padding: 90px 20px 56px; }
+
+    .hero h1 { font-size: clamp(32px, 9vw, 48px); }
+    .hero p.sub { font-size: 16px; }
+    .hero-ctas { flex-direction: column; align-items: center; gap: 12px; }
+    .btn-primary, .btn-outline { width: 100%; max-width: 320px; text-align: center; padding: 16px 24px; }
+    .hero-stats { gap: 16px; justify-content: space-around; }
+    .hero-stat .num { font-size: 26px; }
     .hero-divider { display: none; }
+
+    .dores-grid { grid-template-columns: 1fr; gap: 16px; }
+    .dor-card { padding: 24px; }
+
+    .solucao-cols { gap: 32px; }
+    .dashboard-mock { display: none; }
+
+    .ia-canais { grid-template-columns: 1fr; gap: 16px; }
+    .canal-card { padding: 24px; }
+    .ia-step { gap: 16px; padding: 20px 0; }
+
+    .config-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .config-item { padding: 16px; }
+    .config-n { font-size: 20px; }
+
+    .features-grid { grid-template-columns: 1fr; gap: 16px; }
+    .feature-card { padding: 24px; }
+
+    .dif-grid { grid-template-columns: 1fr; gap: 12px; border: none; }
+    .dif-item { border: 1px solid var(--card-border); padding: 24px; }
+
+    .personas-grid { grid-template-columns: 1fr; gap: 20px; }
+    .persona-header { padding: 20px 24px; }
+    .persona-body { padding: 20px 24px; }
+
     .form-inline { flex-direction: column; }
     .form-inline input { border-right: 1px solid var(--gold-border); border-bottom: none; }
-    footer { padding: 32px 24px; }
+    .form-inline button { padding: 16px; }
+
+    footer { padding: 28px 20px; flex-direction: column; align-items: center; text-align: center; gap: 12px; }
+
+    .section-title { font-size: clamp(24px, 7vw, 36px); }
+    .section-sub { font-size: 15px; }
+  }
+
+  @media(max-width:480px) {
+    .hero-badge { font-size: 10px; padding: 6px 14px; }
+    .hero-stats { flex-direction: column; gap: 12px; align-items: center; }
+    .config-grid { grid-template-columns: 1fr; }
+    .mock-kpis { grid-template-columns: 1fr 1fr; }
+    nav { padding: 14px 16px; }
+    section { padding: 52px 16px; }
+    .hero { padding: 80px 16px 48px; }
   }
 
   .gold-line {

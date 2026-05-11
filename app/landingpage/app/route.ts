@@ -799,7 +799,7 @@ export async function GET() {
   </a>
   <a class="btn-whatsapp nav-cta-btn" href="https://wa.me/5524999720763?text=Ol%C3%A1%21+Quero+agendar+uma+demonstra%C3%A7%C3%A3o+do+Reserva+Ativa+App." target="_blank" rel="noopener noreferrer">
     <span class="txt-desktop">Agendar Demonstração</span>
-    <span class="txt-mobile">Demo</span>
+    <span class="txt-mobile">Agendar</span>
   </a>
 </nav>
 

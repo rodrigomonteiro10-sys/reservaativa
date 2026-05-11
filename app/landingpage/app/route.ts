@@ -773,7 +773,7 @@ export async function GET() {
     </svg>
     RESERVA <span>ATIVA</span><em class="app-tag">APP</em>
   </a>
-  <button class="nav-cta" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Quero uma Demo</button>
+  <a class="nav-cta" href="https://wa.me/5524999720763?text=Ol%C3%A1%21+Quero+agendar+uma+demonstra%C3%A7%C3%A3o+do+Reserva+Ativa+App." target="_blank" rel="noopener noreferrer">Quero uma Demo</a>
 </nav>
 
 <!-- HERO -->
@@ -795,7 +795,7 @@ export async function GET() {
       CRM completo + IA treinada com os dados do seu hotel. Atende no WhatsApp, Instagram e site. Qualifica. Propõe. Fecha. E avisa o seu vendedor na hora certa.
     </p>
     <div class="hero-ctas">
-      <button class="btn-primary" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Agendar Demonstração</button>
+      <a class="btn-primary" href="https://wa.me/5524999720763?text=Ol%C3%A1%21+Quero+agendar+uma+demonstra%C3%A7%C3%A3o+do+Reserva+Ativa+App." target="_blank" rel="noopener noreferrer">Agendar Demonstração</a>
       <button class="btn-outline" onclick="document.getElementById('como-funciona').scrollIntoView({behavior:'smooth'})">Ver Como Funciona</button>
     </div>
     <div class="hero-stats">
@@ -1233,12 +1233,9 @@ export async function GET() {
     <div class="reveal">
       <div class="section-label">Próximo passo</div>
       <div class="gold-line center"></div>
-      <h2 class="section-title">Veja o sistema funcionando<br>com os dados do seu hotel</h2>
+      <h2 class="section-title">Veja o sistema funcionando com os dados do seu hotel</h2>
       <p class="section-sub">Agende uma demonstração gratuita. Mostramos o dashboard ao vivo, a IA em ação e o CRM configurado para o seu perfil.</p>
-      <div class="form-inline">
-        <input type="tel" placeholder="Seu WhatsApp com DDD" id="phone-input">
-        <button onclick="handleCTA()">Quero a Demo</button>
-      </div>
+      <a class="btn-primary" href="https://wa.me/5524999720763?text=Ol%C3%A1%21+Quero+agendar+uma+demonstra%C3%A7%C3%A3o+do+Reserva+Ativa+App." target="_blank" rel="noopener noreferrer" style="display:inline-block; margin-bottom:16px;">Falar no WhatsApp</a>
       <p class="form-note">Sem compromisso. Resposta em até 2 horas úteis.</p>
     </div>
   </div>
@@ -1268,30 +1265,6 @@ export async function GET() {
 
   document.querySelectorAll('.reveal, .ia-step').forEach(el => observer.observe(el));
 
-  function handleCTA() {
-    const phone = document.getElementById('phone-input').value.trim();
-    if (!phone) {
-      document.getElementById('phone-input').style.borderColor = '#c0392b';
-      document.getElementById('phone-input').placeholder = 'Informe seu WhatsApp';
-      return;
-    }
-    const msg = encodeURIComponent('Olá! Quero agendar uma demonstração do Reserva Ativa App. Meu WhatsApp: ' + phone);
-    window.open('https://wa.me/5524999720763?text=' + msg, '_blank');
-  }
-
-  document.getElementById('phone-input').addEventListener('input', function() {
-    this.style.borderColor = '';
-    let v = this.value.replace(/\\D/g,'');
-    if(v.length > 11) v = v.slice(0,11);
-    let formatted = v;
-    if(v.length > 2) formatted = '(' + v.slice(0,2) + ') ' + v.slice(2);
-    if(v.length > 7) formatted = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
-    this.value = formatted;
-  });
-
-  document.getElementById('phone-input').addEventListener('keydown', function(e) {
-    if(e.key === 'Enter') handleCTA();
-  });
 </script>
 </body>
 </html>`

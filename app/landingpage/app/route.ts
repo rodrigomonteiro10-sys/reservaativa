@@ -84,6 +84,8 @@ export async function GET() {
     transition: all 0.2s;
   }
   .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .nav-cta-btn { padding: 11px 24px; font-size: 13px; }
+  .txt-mobile { display: none; }
 
   /* ─── HERO ─── */
   .hero {
@@ -715,6 +717,9 @@ export async function GET() {
     nav { padding: 16px 20px; }
     .nav-logo { font-size: 15px; }
     .nav-cta { padding: 10px 18px; font-size: 12px; }
+    .nav-cta-btn { padding: 10px 16px; font-size: 12px; border-radius: 4px; }
+    .txt-desktop { display: none; }
+    .txt-mobile { display: inline; }
 
     section { padding: 64px 20px; }
     .hero { padding: 90px 20px 56px; }
@@ -792,8 +797,9 @@ export async function GET() {
     </svg>
     RESERVA <span>ATIVA</span><em class="app-tag">APP</em>
   </a>
-  <a class="btn-whatsapp" href="https://wa.me/5524999720763?text=Ol%C3%A1%21+Quero+agendar+uma+demonstra%C3%A7%C3%A3o+do+Reserva+Ativa+App." target="_blank" rel="noopener noreferrer" style="padding:10px 22px; font-size:13px;">
-Agendar Demonstração
+  <a class="btn-whatsapp nav-cta-btn" href="https://wa.me/5524999720763?text=Ol%C3%A1%21+Quero+agendar+uma+demonstra%C3%A7%C3%A3o+do+Reserva+Ativa+App." target="_blank" rel="noopener noreferrer">
+    <span class="txt-desktop">Agendar Demonstração</span>
+    <span class="txt-mobile">Demo</span>
   </a>
 </nav>
 

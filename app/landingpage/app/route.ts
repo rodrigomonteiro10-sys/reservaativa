@@ -1064,60 +1064,6 @@ export async function GET() {
   </div>
 </section>
 
-<!-- CONFIG IA -->
-<section>
-  <div class="container">
-    <div class="text-center reveal">
-      <div class="section-label">Configuração sem técnico</div>
-      <div class="gold-line center"></div>
-      <h2 class="section-title">Você monta a consultora virtual do seu hotel em 10 seções</h2>
-      <p class="section-sub">O próprio gestor configura tudo pelo sistema. Nenhum desenvolvedor necessário.</p>
-    </div>
-    <div class="config-grid">
-      <div class="config-item reveal reveal-delay-1">
-        <div class="config-n">01</div>
-        <div><h4>Identidade do Hotel</h4><p>Nome, tipo, slogan, localização, como chegar, contatos</p></div>
-      </div>
-      <div class="config-item reveal reveal-delay-2">
-        <div class="config-n">02</div>
-        <div><h4>Infraestrutura</h4><p>Piscinas, gastronomia, atividades, área kids, spa, eventos</p></div>
-      </div>
-      <div class="config-item reveal reveal-delay-3">
-        <div class="config-n">03</div>
-        <div><h4>Acomodações</h4><p>Tipos de quarto, capacidade, configuração, preços por temporada</p></div>
-      </div>
-      <div class="config-item reveal reveal-delay-1">
-        <div class="config-n">04</div>
-        <div><h4>Tarifas & Pacotes</h4><p>Inclusões, pacotes especiais, day use, política de crianças</p></div>
-      </div>
-      <div class="config-item reveal reveal-delay-2">
-        <div class="config-n">05</div>
-        <div><h4>Reservas & Pagamentos</h4><p>Formas de pagamento, sinal, check-in/out, cancelamento</p></div>
-      </div>
-      <div class="config-item reveal reveal-delay-3">
-        <div class="config-n">06</div>
-        <div><h4>Regras do Hotel</h4><p>Pets, fumo, horário de silêncio, regras gerais</p></div>
-      </div>
-      <div class="config-item reveal reveal-delay-1">
-        <div class="config-n">07</div>
-        <div><h4>FAQ</h4><p>Perguntas frequentes com respostas que a IA usa automaticamente</p></div>
-      </div>
-      <div class="config-item reveal reveal-delay-2">
-        <div class="config-n">08</div>
-        <div><h4>Personalidade da IA</h4><p>Nome, tom, idiomas, emojis, saudação personalizada</p></div>
-      </div>
-      <div class="config-item reveal reveal-delay-3">
-        <div class="config-n">09</div>
-        <div><h4>Vendas & Objeções</h4><p>Diferenciais competitivos e respostas prontas para cada objeção</p></div>
-      </div>
-      <div class="config-item reveal reveal-delay-1">
-        <div class="config-n">10</div>
-        <div><h4>Manutenção</h4><p>Controle de versão da base de conhecimento da IA</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- FEATURES CRM -->
 <section class="crm-section">
   <div class="container">
